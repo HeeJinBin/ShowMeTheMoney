@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/tv_log_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Log In"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="70dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_below="@+id/tv_log_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/id"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="10dp"/>
+
+    <EditText
+        android:id="@+id/et_id"
+        android:layout_below="@id/tv_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="20dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_below="@id/et_id"
+        android:id="@+id/password_layout"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/password"/>
+
+        <Button
+            android:layout_alignParentRight="true"
+            android:id="@+id/visible_pw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show"
+            android:textColor="@color/colorMain"
+            android:background="#00ff0000"/>
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_below="@id/password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="50dp"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_below="@id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/colorMain"
+        android:onClick="signIn"
+        android:text="로그인"
+        android:textSize="20dp"
+        android:textColor="@android:color/white"/>
+
+    <View
+        android:id="@+id/gray_line"
+        android:layout_below="@id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_gravity="center"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_below="@+id/gray_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/question_signup"
+        android:gravity="center"
+        android:id="@+id/tv_join"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_join"
+        android:id="@+id/btn_join"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:onClick="signUp"
+        android:text="회원가입"
+        android:textSize="20dp"
+        android:textColor="@color/colorMain"
+        android:background="@drawable/btn_shape"/>
+
+
+</RelativeLayout>

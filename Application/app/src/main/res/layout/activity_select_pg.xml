@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailsView.SelectPG">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="70dp"
+        android:id="@+id/pg_top_layout">
+
+        <Button
+            android:id="@+id/btn_pg_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="X"
+            android:textSize="30dp"
+            android:background="#00ff0000"/>
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="PG사 선택"
+            android:textSize="30dp"
+            android:textColor="@android:color/black"/>
+
+    </RelativeLayout>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_pg"
+        android:layout_below="@+id/pg_top_layout"
+        android:text="결제대행사"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="20dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/tv_pg"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="50dp"
+        android:id="@+id/pg_check_layout">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="KG이니시스"
+                    android:textColor="@android:color/black"
+                    android:textSize="25dp"
+                    android:layout_marginRight="10dp"/>
+
+                <CheckBox
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checked="false"
+                    android:button="@android:color/transparent"
+                    android:background="@drawable/checkbox"
+                    android:id="@+id/checkbox_kg"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="나이스페이"
+                    android:textColor="@android:color/black"
+                    android:layout_marginRight="10dp"
+                    android:textSize="25dp"/>
+
+                <CheckBox
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checked="false"
+                    android:button="@android:color/transparent"
+                    android:background="@drawable/checkbox"
+                    android:id="@+id/checkbox_nice"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NHN KCP"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="25dp"/>
+
+                <CheckBox
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checked="false"
+                    android:button="@android:color/transparent"
+                    android:background="@drawable/checkbox"
+                    android:id="@+id/checkbox_nhn"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LG U+"
+                    android:textColor="@android:color/black"
+                    android:layout_marginRight="10dp"
+                    android:textSize="25dp"/>
+
+                <CheckBox
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:checked="false"
+                    android:button="@android:color/transparent"
+                    android:background="@drawable/checkbox"
+                    android:id="@+id/checkbox_lg"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/pg_check_layout"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="50dp"
+        android:id="@+id/border_line"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_simple"
+        android:layout_below="@+id/border_line"
+        android:text="간편결제"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="20dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/tv_simple"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="50dp"
+        android:id="@+id/simple_check_layout">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginRight="40dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="네이버페이"
+                android:textColor="@android:color/black"
+                android:layout_marginRight="10dp"
+                android:textSize="25dp"/>
+
+            <CheckBox
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:checked="false"
+                android:button="@android:color/transparent"
+                android:background="@drawable/checkbox"
+                android:id="@+id/checkbox_naver"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PAYCO"
+                android:textColor="@android:color/black"
+                android:layout_marginRight="10dp"
+                android:textSize="25dp"/>
+
+            <CheckBox
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:checked="false"
+                android:button="@android:color/transparent"
+                android:background="@drawable/checkbox"
+                android:id="@+id/checkbox_payco"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_pg_search"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="검색"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="@color/colorMain"/>
+
+</RelativeLayout>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "551480265032",
+    "firebase_url": "https://smtm-9ef14.firebaseio.com",
+    "project_id": "smtm-9ef14",
+    "storage_bucket": "smtm-9ef14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551480265032:android:c979c19e787f6a8f454b7d",
+        "android_client_info": {
+          "package_name": "com.example.smtm7"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551480265032-3opdhtlf485led0h029g04cd27oa54qc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smtm7",
+            "certificate_hash": "0c4b5e58d1b6672d384f4753f557a328d1963c91"
+          }
+        },
+        {
+          "client_id": "551480265032-e0mefskbrrfh3t2tgdj4m41otq6gk4e0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp4YGMeJT2_-s8z6YmXVTAoN1rLhhUg0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "551480265032-e0mefskbrrfh3t2tgdj4m41otq6gk4e0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

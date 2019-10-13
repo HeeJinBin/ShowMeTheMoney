@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">SMTM7</string>
+    <string name="name">이름 (닉네임)</string>
+    <string name="id">아이디</string>
+    <string name="password">비밀번호</string>
+    <string name="password_check">비밀번호 확인</string>
+    <string name="show">Show</string>
+
+    <string name="signin">로그인</string>
+    <string name="success_login">로그인 성공</string>
+    <string name="failed_login">로그인 실패</string>
+
+    <string name="signup">회원가입</string>
+    <string name="join">회원가입 완료</string>
+    <string name="success_signup">회원가입 성공</string>
+    <string name="failed_signup">회원가입 실패</string>
+    <string name="question_signup">회원이 아니신가요?</string>
+    <string name="double_check">중복체크</string>
+    <string name="email_interlock">이메일 연동 (최대 3개)</string>
+
+    <string name="push_certification">인증번호 발송</string>
+    <string name="check_certification">인증번호 확인</string>
+</resources>
