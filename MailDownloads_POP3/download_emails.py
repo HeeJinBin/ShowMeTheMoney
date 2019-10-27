@@ -3,15 +3,16 @@ from email.parser import Parser
 import base64
 from bs4 import BeautifulSoup
 import quopri
+import datetime
 
-poplib._MAXLINE=204800
+poplib._MAXLINE = 204800
 
 
 def utf_decoding(msg):
-    msg = msg.replace("=?UTF-8?B?","")
+    msg = msg.replace("=?UTF-8?B?", "")
     msg = msg.replace("=?utf-8?B?", "")
     msg = msg.replace("?=", "")
-    msg = msg.replace("\"","")
+    msg = msg.replace("\"", "")
     msg = base64.b64decode(msg)
     msg = msg.decode('utf-8')
     return msg
@@ -29,7 +30,7 @@ def eur_kr_decoding(msg):
 
 def info_from_html_for_naverpay(msg_content):
     global price, purchasing_item, purchasing_office
-    soup = BeautifulSoup(msg_content,'html.parser')
+    soup = BeautifulSoup(msg_content, 'html.parser')
     soup.prettify()
     # 결제금액
     for tag in soup.find_all('td'):
@@ -135,7 +136,7 @@ resp, mails, octets = server.list()
 
 # retrieve the newest email index number
 index = len(mails)
-print("length of index : ",index)
+print("length of index : ", index)
 print()
 
 # declare variables for db
@@ -166,17 +167,19 @@ for i in range(index):
         if "결제" in email_title:
             print("<", i, ">")
             email_date = msg.get('Date')
-            info_from_html_for_KG(msg_content)
+            email_date_pasing = datetime.datetime.strptime(email_date, '%a, %d %b %Y %H:%M:%S +0900')
+            email_date_pasing = email_date_pasing.strftime('%Y.%m.%d %H:%M:%S')
             try:
                 print('Date ' + email_date)
             except TypeError:
                 print("type error")
+            print(email_date_pasing)
             print('From KG이니시스')
             print('Subject ' + email_title)
             info_from_html_for_KG(msg_content)
             print('구매상점명 '+purchasing_office)
             print('주문상품명 '+purchasing_item)
-            print('Price ' + price)
+            print('결제금액 ' + price)
             print()
         else:
             pass
@@ -188,19 +191,21 @@ for i in range(index):
         if "결제" in email_title:
             print("<", i, ">")
             email_date = msg.get('Date')
+            email_date_pasing = datetime.datetime.strptime(email_date, '%a, %d %b %Y %H:%M:%S +0900 (KST)')
+            email_date_pasing = email_date_pasing.strftime('%Y.%m.%d %H:%M:%S')
             try:
                 print('Date ' + email_date)
             except TypeError:
                 print("type error")
+            print(email_date_pasing)
             print('From 네이버페이')
             print('Subject ' + email_title)
             info_from_html_for_naverpay(msg_content)
             print('구매상점명 ' + purchasing_office)
             print('주문상품명 ' + purchasing_item)
-            print('가격 ' + price)
-            #print(msg_content)
+            print('결제금액 ' + price)
+            # print(msg_content)
             print()
-            # print('To ' + email_to)
         else:
             pass
 
@@ -211,17 +216,20 @@ for i in range(index):
         if "결제" in email_title:
             print("<", i, ">")
             email_date = msg.get('Date')
+            email_date_pasing = datetime.datetime.strptime(email_date,'%a, %d %b %Y %H:%M:%S +0900')
+            email_date_pasing = email_date_pasing.strftime('%Y.%m.%d %H:%M:%S')
             try:
                 print('Date ' + email_date)
             except TypeError:
                 print("type error")
+            print(email_date_pasing)
             print('From NHN')
             print('Subject ' + email_title)
             info_from_html_for_NHN(msg_content)
             print('구매상점명 ' + purchasing_office)
             print('주문상품명 ' + purchasing_item)
-            print('Price ' + price)
-            #print(msg_content)
+            print('결제금액 ' + price)
+            # print(msg_content)
             print()
         else:
             pass
@@ -234,5 +242,3 @@ for i in range(index):
 # server.dele(index)
 # close pop3 server connection.
 server.quit()
-
-
