@@ -1,5 +1,6 @@
 package com.example.smtm7.DetailsView;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -32,6 +33,8 @@ public class SelectDate extends AppCompatActivity {
     private Button cancelButton;
     private Button searchButton;
 
+    private String dateText = null;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +56,16 @@ public class SelectDate extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent();
+                intent.putExtra("Date", dateText);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
         materialCalendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
-                .setMinimumDate(CalendarDay.from(2017, 0, 1))
+                .setMinimumDate(CalendarDay.from(2016, 0, 1))
                 .setMaximumDate(CalendarDay.from(2030, 11, 31))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();
@@ -72,11 +78,7 @@ public class SelectDate extends AppCompatActivity {
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                int Year = date.getYear();
-                int Month = date.getMonth() + 1;
-                int Day = date.getDay();
-
-                //클릭된 날짜 표시 + DB에 넣기
+                dateText = date.getYear()+"-" + String.format("%02d",date.getMonth()+1)+"-"+date.getDay();
             }
         });
     }

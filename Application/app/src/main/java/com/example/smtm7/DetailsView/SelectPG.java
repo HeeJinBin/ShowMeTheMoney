@@ -1,5 +1,6 @@
 package com.example.smtm7.DetailsView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -49,25 +50,36 @@ public class SelectPG extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
                 //체크박스 결과값 저장한후 검색탭으로 넘겨주기
+                int i=0;
                 if (checkBoxkg.isChecked()){
-
+                    intent.putExtra(Integer.toString(i), "KG이니시스");
+                    i++;
                 }
                 if(checkBoxnhn.isChecked()){
-
+                    intent.putExtra(Integer.toString(i), "NHN KCP");
+                    i++;
                 }
                 if(checkBoxnice.isChecked()){
-
+                    intent.putExtra(Integer.toString(i), "나이스페이");
+                    i++;
                 }
                 if(checkBoxlg.isChecked()){
-
+                    intent.putExtra(Integer.toString(i), "LGU+");
+                    i++;
                 }
                 if(checkBoxnaver.isChecked()){
-
+                    intent.putExtra(Integer.toString(i), "네이버페이");
+                    i++;
                 }
                 if(checkBoxpayco.isChecked()){
-
+                    intent.putExtra(Integer.toString(i), "PAYCO");
+                    i++;
                 }
+                intent.putExtra("number", i);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }

@@ -18,8 +18,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="35dp"
             android:layout_marginStart="20dp"
             android:orientation="horizontal">
 
@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="김다빈"
-                android:textSize="30dp"
+                android:textSize="25dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:id="@+id/user_name"/>
@@ -38,7 +38,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="회원님"
                 android:textColor="@color/colorMain"
-                android:textSize="20dp"/>
+                android:textSize="18dp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -63,9 +63,10 @@
             android:background="@drawable/layout_border"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
+                android:id="@+id/btn_email_setting"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="이메일 연동 설정"
                 android:gravity="center_vertical"
@@ -98,9 +99,10 @@
             android:background="@drawable/layout_border"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
+                android:id="@+id/btn_widget_setting"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="에어버튼 설정"
                 android:gravity="center_vertical"

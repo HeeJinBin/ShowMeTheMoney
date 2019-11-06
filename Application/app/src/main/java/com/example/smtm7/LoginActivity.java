@@ -1,39 +1,42 @@
 package com.example.smtm7;
 
 import android.content.Intent;
-import android.media.MediaCodec;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Patterns;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smtm7.AirButton.FloatingActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.smtm7.Connection.ApiService;
+import com.example.smtm7.Connection.NetworkHelper;
+import com.example.smtm7.Connection.ResponseLogin;
+import com.example.smtm7.Connection.ResponseTransaction;
+import com.example.smtm7.DataBase.DBEmailAdapter;
+import com.example.smtm7.DataBase.DBTransactionAdapter;
+import com.example.smtm7.DataBase.SharedPreferenceBase;
 
+import java.util.List;
 import java.util.regex.Pattern;
+
+import okhttp3.Headers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Header;
 
 public class LoginActivity extends AppCompatActivity {
     //아이디 정규식
-    private static final Pattern ID_PATTERN = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$");
+    private static final Pattern ID_PATTERN = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,19}$");
     //비밀번호 정규식
-    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@.#$%^&*?_~]{6,16}$");
-
-    // 파이어베이스 인증 객체 생성
-    private FirebaseAuth firebaseAuth;
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@.#$%^&*?_~]{6,20}$");
 
     // 아이디과 비밀번호
     private EditText editTextID;
@@ -49,7 +52,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        //내부 DB clear
+        DBTransactionAdapter transactionAdapter = new DBTransactionAdapter(this);
+        transactionAdapter.open();
+        transactionAdapter.deleteAllTransaction();
+        transactionAdapter.close();
+
+        DBEmailAdapter emailAdapter = new DBEmailAdapter(this);
+        emailAdapter.open();
+        emailAdapter.deleteAllEmail();
+        emailAdapter.close();
 
         editTextID = findViewById(R.id.et_id);
         editTextPassword = findViewById(R.id.et_password);
@@ -79,11 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         password = editTextPassword.getText().toString();
 
         if(isValidID() && isValidPasswd()) {
-            loginUser(id, password);
-
-            Intent intent = new Intent(LoginActivity.this, FloatingActivity.class);
-            startActivity(intent);
-            finish();
+            loginUser();
         }
     }
 
@@ -114,20 +122,68 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // 로그인
-    private void loginUser(String email, String password)
-    {
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // 로그인 성공
-                            Toast.makeText(LoginActivity.this, R.string.success_login, Toast.LENGTH_SHORT).show();
-                        } else {
-                            // 로그인 실패
-                            Toast.makeText(LoginActivity.this, R.string.failed_login, Toast.LENGTH_SHORT).show();
-                        }
+    private void loginUser(){
+        NetworkHelper networkHelper = new NetworkHelper();
+        final ApiService apiService = networkHelper.getApiService();
+
+        //서버에 POST 수행
+        apiService.login(id,password).enqueue(new Callback<ResponseLogin>() {
+            @Override
+            public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
+                if(response.isSuccessful()){
+                    ResponseLogin body = response.body();
+
+                    if(body.getResult().equals("Login Success")){
+                        // 로그인 성공
+                        Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                        Log.d("Token", body.getToken());
+
+                        SharedPreferenceBase sharedPreferenceBase = SharedPreferenceBase.getInstance(getApplicationContext());
+                        sharedPreferenceBase.setString("id", id);
+                        sharedPreferenceBase.setString("nickname", body.getNickname());
+                        sharedPreferenceBase.setString("token", body.getToken());
+
+                        //거래내역 데이터 받아오기
+//                        apiService.getTransaction(id).enqueue(new Callback<List<ResponseTransaction>>() {
+//                            @Override
+//                            public void onResponse(Call<List<ResponseTransaction>> call, Response<List<ResponseTransaction>> response) {
+//                                if(response.isSuccessful()){
+//                                    List<ResponseTransaction> resource = response.body();
+//
+//                                    DBTransactionAdapter transactionAdapter = new DBTransactionAdapter(getApplicationContext());
+//                                    transactionAdapter.open();
+//
+//                                    //내부 DB에 저장 (Transaction)
+//                                    for(ResponseTransaction re : resource){
+//                                        transactionAdapter.insertTransaction(re.getPGname(), re.getDate(), re.getPurchasing_office(), re.getPurchasing_item(), re.getPrice());
+//                                        Log.d("GETTRANSACTION", re.getPGname()+" "+re.getDate()+" "+re.getPurchasing_office()+" "+re.getPurchasing_item()+" "+re.getPrice());
+//                                    }
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<List<ResponseTransaction>> call, Throwable t) {
+//                                Toast.makeText(LoginActivity.this, "거래내역 받아오기 실패", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//
+//                        Intent intent = new Intent(LoginActivity.this, FloatingActivity.class);
+//                        startActivity(intent);
+//                        sharedPreferenceBase.setString("context","floating");
+//                        finish();
+                    } else {
+                        // 로그인 실패
+                        Toast.makeText(LoginActivity.this, body.getResult(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                } else{
+                    Toast.makeText(LoginActivity.this, "연결은 했는데 응답 없음", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseLogin> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Server 연결 실패", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

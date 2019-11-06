@@ -1,37 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:gravity="right|top">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/overlay_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/first_overlay"
         android:clickable="true"
-        android:visibility="visible"
-        android:layout_marginRight="5dp">
-
+        android:visibility="visible">
         <ImageButton
             android:id="@+id/floating_button"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:background="@drawable/air_button_money_icon"
             android:src="@drawable/air_button_money" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
         android:id="@+id/second_overlay"
         android:clickable="false"
         android:visibility="gone"
         android:orientation="horizontal">
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,8 +39,8 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxHeight="70dp"
-                android:maxWidth="70dp"
+                android:maxHeight="60dp"
+                android:maxWidth="60dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:layout_gravity="center"
@@ -55,8 +50,8 @@
                 android:layout_marginBottom="15dp"/>
 
             <ImageButton
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
@@ -64,11 +59,10 @@
                 android:background="@drawable/air_button_app_icon"
                 android:src="@drawable/air_button_app"/>
         </LinearLayout>
-
         <ImageButton
             android:layout_gravity="center"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:layout_marginLeft="5dp"
@@ -77,5 +71,4 @@
             android:src="@drawable/air_button_cancel"
             android:layout_alignParentRight="true"/>
     </LinearLayout>
-
 </LinearLayout>

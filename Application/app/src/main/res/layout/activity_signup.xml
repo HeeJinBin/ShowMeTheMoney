@@ -5,22 +5,37 @@
     android:layout_height="match_parent"
     tools:context=".SignUpActivity">
 
-    <TextView
-        android:id="@+id/tv_signup"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="회원가입"
-        android:textSize="25dp"
-        android:textColor="@android:color/black"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
         android:layout_marginBottom="20dp"
-        android:gravity="center"/>
+        android:gravity="center_vertical"
+        android:id="@+id/signup_layout">
+
+        <Button
+            android:id="@+id/btn_signup_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="X"
+            android:textSize="25dp"
+            android:background="#00ff0000"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="회원가입"
+            android:textSize="30dp"
+            android:textColor="@android:color/black"/>
+
+    </RelativeLayout>
 
     <View
         android:id="@+id/gray_line_signup"
-        android:layout_below="@id/tv_signup"
+        android:layout_below="@id/signup_layout"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
@@ -46,34 +61,18 @@
         android:layout_marginRight="30dp"
         android:layout_marginBottom="10dp"/>
 
-    <RelativeLayout
-        android:id="@+id/id_layout"
+    <TextView
+        android:id="@+id/tv_id_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_name"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp">
-
-        <TextView
-            android:id="@+id/tv_id_up"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/id"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:id="@+id/btn_id_check"
-            android:layout_alignParentRight="true"
-            android:text="중복체크"
-            android:textColor="@color/colorMain"
-            android:background="@drawable/btn_shape"/>
-
-    </RelativeLayout>
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/id"/>
 
     <EditText
-        android:layout_below="@+id/id_layout"
+        android:layout_below="@+id/tv_id_up"
         android:id="@+id/et_id_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,7 +84,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/text_id"
         android:layout_below="@+id/et_id_up"
-        android:text="영문으로 시작/ 영문, 숫자, '_'으로만 이루어진 5 ~ 12자 이하의 아이디"
+        android:text="영문으로 시작/ 영문, 숫자, '_'으로만 이루어진 5 ~ 20자 이하의 아이디"
         android:textSize="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -116,7 +115,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/text_pw"
         android:layout_below="@+id/et_password_up"
-        android:text="영문, 숫자, 특수문자로 이루어진 6 ~ 16자 이하의 비밀번호"
+        android:text="영문, 숫자, 특수문자로 이루어진 6 ~ 20자 이하의 비밀번호"
         android:textSize="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -141,7 +140,7 @@
         android:inputType="textPassword"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="20dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -149,8 +148,7 @@
         android:id="@+id/tv_email_interlock_layout"
         android:layout_below="@id/et_password_up_check"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="50dp">
+        android:layout_marginRight="30dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -171,7 +169,19 @@
             android:textColor="@color/colorMain"
             android:background="@drawable/btn_shape"/>
 
+
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_interlock"
+        android:layout_below="@id/tv_email_interlock_layout"
+        android:text="아직 이메일 연동되지 않았습니다!"
+        android:textSize="13dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:textColor="@color/colorMain"/>
 
     <Button
         android:layout_width="match_parent"
@@ -186,4 +196,5 @@
         android:layout_marginBottom="70dp"
         android:layout_marginLeft="100dp"
         android:layout_marginRight="100dp"/>
+
 </RelativeLayout>

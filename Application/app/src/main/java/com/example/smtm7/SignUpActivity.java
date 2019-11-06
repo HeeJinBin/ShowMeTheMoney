@@ -2,101 +2,112 @@ package com.example.smtm7;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.smtm7.Connection.ApiService;
+import com.example.smtm7.Connection.NetworkHelper;
+import com.example.smtm7.Connection.ResponseSignin;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
     //아이디 정규식
-    private static final Pattern ID_PATTERN = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$");
+    private static final Pattern ID_PATTERN = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,19}$");
     //비밀번호 정규식
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@.#$%^&*?_~]{6,20}$");
-
-    // 파이어베이스 인증 객체 생성
-    private FirebaseAuth firebaseAuth;
 
     private EditText edittextName;
     private EditText edittextID;
     private EditText edittextPassword;
     private EditText edittextPasswordCheck;
     private Button emailInterlock;
-    private Button IDCheck;
+    private Button cancel;
+    private TextView tvInterlock;
 
     private String name;
     private String id;
     private String password;
     private String passwordCheck;
+    private String email;
+    private String email_pw;
+    private boolean boolInterlock;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        firebaseAuth = FirebaseAuth.getInstance();
 
         edittextName = findViewById(R.id.et_name);
         edittextID = findViewById(R.id.et_id_up);
         edittextPassword = findViewById(R.id.et_password_up);
         edittextPasswordCheck = findViewById(R.id.et_password_up_check);
+        tvInterlock = findViewById(R.id.tv_interlock);
+        cancel = findViewById(R.id.btn_signup_cancel);
 
-        //이메일 중복체크
-        IDCheck = findViewById(R.id.btn_id_check);
-        IDCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //서버에 아이디 중복되는지 여부 물어보고 dialog 띄워주기
-            }
-        });
+        boolInterlock = false;
 
         //이메일 연동
         emailInterlock = findViewById(R.id.btn_email_add);
         emailInterlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(SignUpActivity.this, EmailInterlock.class);
+                startActivityForResult(intent, 1);
+            }
+        });
 
+        //회원가입 취소
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
 
-    private void createUser(String email, String password) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // 회원가입 성공
-                            Toast.makeText(SignUpActivity.this, R.string.success_signup, Toast.LENGTH_SHORT).show();
+    private void createUser() {
+        NetworkHelper networkHelper = new NetworkHelper();
+        ApiService apiService = networkHelper.getApiService();
 
-                            //내부 DB에 저장!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            //서버에 보내기
+        //서버에 POST 수행
+        apiService.signup(name, id, password, passwordCheck, email, email, email_pw).enqueue(new Callback<ResponseSignin>() {
+            @Override
+            public void onResponse(Call<ResponseSignin> call, Response<ResponseSignin> response) {
+                if(response.isSuccessful()){
+                    ResponseSignin body = response.body();
+                    if(body.getResult().equals("User Creation Success")){
+                        // 회원가입 성공
+                        Toast.makeText(SignUpActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            // 회원가입 실패
-                            Toast.makeText(SignUpActivity.this, R.string.failed_signup, Toast.LENGTH_SHORT).show();
-                        }
+                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // 회원가입 실패
+                        Toast.makeText(SignUpActivity.this, body.getResult(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseSignin> call, Throwable t) {
+                Toast.makeText(SignUpActivity.this, "Server 연결 실패", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void join(View view){
@@ -108,7 +119,11 @@ public class SignUpActivity extends AppCompatActivity {
         if(isValidID()){
             if(isValidPasswd()){
                 if(password.equals(passwordCheck)){
-                    createUser(id,password);
+                    if(boolInterlock){
+                        createUser();
+                    } else{
+                        Toast.makeText(this, "이메일 연동이 필요합니다.",Toast.LENGTH_SHORT).show();
+                    }
                 } else{
                     Toast.makeText(this, "비밀번호가 일치하지 않습니다.",Toast.LENGTH_SHORT).show();
                 }
@@ -143,6 +158,22 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         } else {
             return true;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+                boolean result = data.getBooleanExtra("result", false);
+                if(result){
+                    email = data.getStringExtra("email");
+                    email_pw = data.getStringExtra("pw");
+
+                    tvInterlock.setText("이메일 연동이 완료되었습니다!");
+                    boolInterlock = true;
+                }
+            }
         }
     }
 }

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/darker_gray">
 
     <LinearLayout
+        android:id="@+id/search_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         android:background="@android:color/white"
+        android:layout_marginBottom="5dp"
         android:orientation="vertical">
 
         <TextView
@@ -15,19 +19,27 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="17dp"
             android:textStyle="bold"
             android:text="한눈에 보기"
-            android:textSize="30dp"
+            android:textSize="25dp"
             android:textColor="@android:color/black"/>
 
     </LinearLayout>
 
-    <ListView
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/total_listview"
-        android:background="@android:color/white"
-        android:layout_marginTop="5dp"/>
+        android:layout_below="@+id/search_layout"
+        android:id="@+id/swipe_layout">
 
-</LinearLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:id="@+id/listView"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

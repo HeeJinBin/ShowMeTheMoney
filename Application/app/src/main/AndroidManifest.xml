@@ -8,17 +8,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
-        <activity
-            android:name=".LoginActivity">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".SignUpActivity"/>
+        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".EmailInterlock"></activity>
 
         <activity
             android:name="com.example.smtm7.AirButton.FloatingActivity"
@@ -26,7 +25,8 @@
             android:exported="true">
         </activity>
 
-        <activity android:name=".DetailsView.DetailsActivity"/>
+        <activity android:name=".DetailsView.DetailsActivity">
+        </activity>
         <activity android:name=".DetailsView.SelectPG"/>
         <activity android:name=".DetailsView.SelectDate"/>
         <activity android:name=".DetailsView.SelectPrice"/>
@@ -35,20 +35,8 @@
             android:enabled="true"
             android:permission="android.permission.SYSTEM_ALERT_WINDOW">
         </service>
-
-        <receiver
-            android:name=".Receiver.BroadcastReceiver"
-            android:enabled="true"
-            android:exported="false">
-
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <data android:scheme="package"/>
-            </intent-filter>
-        </receiver>
-
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 </manifest>
