@@ -24,8 +24,9 @@ date_regular = re.compile('\d+[/]\d+[/]*\d*|\d+[.]\d+[.]*\d*|\d+월\s*\d+일')
 price_regular = re.compile('-\d*[,]*\d+\s*원|출금\s*\d*[,]*\d+\s*원')
 price_regular2 = re.compile('(\d*[,]*)*\d+\s*원|(\d*[,]*)*\d+|[\\\](\d*[,]*)*\d+|W(\d*[,]*)*\d+')
 price_regular3 = re.compile('(\d*[,]*)*\d+\s*원')
+
 numbers = []
-valid = False            # 간편결제 or PG사 지출이 맞는지
+valid = False           # 간편결제 or PG사 지출이 맞는지
 changePrice = False     # for 똑똑가계부 \처리
 
 
@@ -38,21 +39,41 @@ for token in tokens:
         company = "네이버페이"
         valid = True
         break
-    elif "NHN" in token:
-        company = "NHN"
+    elif "NHN" in token or "KCP" in token:
+        company = "NHN KCP"
         valid = True
         break
 
-# 날짜 먼저 찾고 입금이라는 단어가 있을경우 지출내역 아니므로 지출금액 찾지 않음
+# 입금이라는 단어가 있을경우 지출내역 아니므로 지출금액 찾지 않음
+for token in tokens:
+    if "입금" in token:
+        valid = False
+
+# 날짜 찾기
 if valid:
     # print("<날짜>")
     for token in tokens:
         m = date_regular.search(token)
         if m is not None:
             date = m.group()
+            temp = re.findall("\d+", date)
+            if len(temp) == 3:
+                year = temp[0]
+                month = temp[1]
+                day = temp[2]
+
+            elif len(temp) == 2:
+                if len(temp[0]) > 3:
+                    year = temp[0]
+                    month = temp[1]
+                    day = '0'
+                else:
+                    year = '0'
+                    month = temp[0]
+                    day = temp[1]
+
+            date = year + "." + month + "." + day
             print(date)
-        if "입금" in token:
-            valid = False
 
 # 지출금액 찾기
 if valid:
