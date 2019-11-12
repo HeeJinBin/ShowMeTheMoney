@@ -133,7 +133,7 @@ public class DBTransactionAdapter {
     }
 
     public void deleteAllTransaction(){
-        String sql = "delete from "+DATABASE_TTABLE;
+        String sql = "delete from "+DATABASE_TTABLE+";";
         database.execSQL(sql);
     }
 }

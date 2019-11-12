@@ -2,6 +2,7 @@ package com.example.smtm7.DetailsView;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.smtm7.Connection.ApiService;
+import com.example.smtm7.Connection.NetworkHelper;
+import com.example.smtm7.Connection.ResponseTransaction;
 import com.example.smtm7.DataBase.DBTransactionAdapter;
+import com.example.smtm7.DataBase.SharedPreferenceBase;
 import com.example.smtm7.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FragmentSearch extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -69,8 +79,63 @@ public class FragmentSearch extends Fragment implements SwipeRefreshLayout.OnRef
     //ListView 새로고침
     @Override
     public void onRefresh() {
+        //거래내역 데이터 받아오기
+        NetworkHelper networkHelper = new NetworkHelper();
+        ApiService apiService = networkHelper.getApiService();
+
+        SharedPreferenceBase sharedPreferenceBase = new SharedPreferenceBase(getContext());
+
+        apiService.getTransaction(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id")).enqueue(new Callback<List<ResponseTransaction>>() {
+            @Override
+            public void onResponse(Call<List<ResponseTransaction>> call, Response<List<ResponseTransaction>> response) {
+                if(response.isSuccessful()){
+                    List<ResponseTransaction> resource = response.body();
+
+                    transactionAdapter.open();
+
+                    //내부 DB에 저장 (Transaction)
+                    for(ResponseTransaction re : resource){
+                        transactionAdapter.insertTransaction(re.getPGname(), re.getDate(), re.getPurchasing_office(), re.getPurchasing_item(), re.getPrice());
+                        Log.d("GETTRANSACTION", re.getPGname()+" "+re.getDate()+" "+re.getPurchasing_office()+" "+re.getPurchasing_item()+" "+re.getPrice());
+                    }
+                    transactionAdapter.close();
+
+                    updateList();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ResponseTransaction>> call, Throwable t) {
+
+            }
+        });
 
         //새로고침 아이콘 삭제
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public void updateList(){
+        transactionAdapter.open();
+        //transactionAdapter.deleteAllTransaction();
+
+        Cursor cursor = transactionAdapter.searchAllTransaction();
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            String office = "";
+            if(!cursor.getString(3).equals("none")){
+                office = cursor.getString(3);
+            }
+
+            DecimalFormat decimalFormat = new DecimalFormat("#,###");
+            String price = decimalFormat.format(Double.parseDouble(cursor.getString(5)))+"원";
+
+            TransactionItem item = new TransactionItem(cursor.getString(1),cursor.getString(2),office,cursor.getString(4),price);
+            itemList.add(item);
+            cursor.moveToNext();
+        }
+        transactionAdapter.close();
+
+        listAdapter = new ListAdapter(itemList);
+        listView.setAdapter(listAdapter);
     }
 }

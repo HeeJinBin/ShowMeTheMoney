@@ -15,23 +15,34 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-    @FormUrlEncoded
-    @POST("/token/")
-    Call<ResponseSignin> getToken();
-
     //회원 가입 요청 (가입정보 전송) POST
     @FormUrlEncoded
     @POST("/accounts/register/") //api path
     Call<ResponseSignin> signup(@Field("nickname") String nickname, @Field("username") String username, @Field("password1") String password1,
-                                @Field("password2") String password2, @Field("email") String email, @Field("email_1") String email_1, @Field("pw_1") String pw_1);
+                                @Field("password2") String password2, @Field("email") String email);
 
     //로그인 요청 (아이디/비밀번호 전송) POST
     @FormUrlEncoded
+    @POST("/api/token/") //api path
+    Call<ResponseToken> login(@Field("username") String username, @Field("password") String password);
+
+    //로그인 이후 닉네임 정보 받아오기
+    @FormUrlEncoded
     @POST("/accounts/login/") //api path
-    Call<ResponseLogin> login(@Field("username") String username, @Field("password") String password);
+    Call<ResponseLogin> getnickname(@Header("Authorization") String token, @Field("username") String username, @Field("password") String password);
+
+    //이메일 연동 여부
+    @FormUrlEncoded
+    @POST("/mailcheck/")
+    Call<ResponseSignin> getemailinterlock(@Header("Authorization") String token, @Field("useremail") String email,@Field("userpassword") String password);
+
+    //거래내역 업데이트
+    @FormUrlEncoded
+    @POST("/maildata/")
+    Call<ResponseUpdate> updatelist(@Header("Authorization") String token, @Field("username") String username, @Field("useremail") String email, @Field("userpassword") String password, @Field("index") int index);
 
     //거래내역 받아오기
     @FormUrlEncoded
     @POST("/accounts/datalist/")
-    Call<List<ResponseTransaction>> getTransaction(@Field("username") String username);
+    Call<List<ResponseTransaction>> getTransaction(@Header("Authorization") String token, @Field("username") String username);
 }

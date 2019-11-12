@@ -5,9 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.smtm7.AirButton.FloatingActivity;
 import com.example.smtm7.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -22,6 +28,10 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        InnerReceiver innerReceiver = new InnerReceiver();
+        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        registerReceiver(innerReceiver, intentFilter);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frame_layout, fragmentFiltering).commitAllowingStateLoss();
@@ -50,5 +60,35 @@ public class DetailsActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.d("TAG", "onReceive: Pressed Back");
+        finish();
+        Intent i = new Intent(getApplicationContext(), FloatingActivity.class);
+        startActivity(i);
+    }
+
+    private class InnerReceiver extends BroadcastReceiver {
+        final String SYSTEM_REASON_KEY = "reason";
+        final String SYSTEM_HOME_KEY = "homekey";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)){
+                String reason = intent.getStringExtra(SYSTEM_REASON_KEY);
+                if(reason!=null){
+                    if(reason.equals(SYSTEM_HOME_KEY)){
+                        Log.d("TAG", "onReceive: Pressed Home Key");
+                        finish();
+                        Intent i = new Intent(getApplicationContext(), FloatingActivity.class);
+                        startActivity(i);
+                    }
+                }
+            }
+        }
     }
 }

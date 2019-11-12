@@ -10,17 +10,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LoginActivity">
+        
+        <activity android:name=".ScreenActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
+        <activity android:name=".LoginActivity">
         </activity>
         <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".EmailInterlock"></activity>
+
+        <activity android:name=".InitialSetting.EmailInterlock">
+        </activity>
 
         <activity
-            android:name="com.example.smtm7.AirButton.FloatingActivity"
+            android:name=".AirButton.FloatingActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="true">
         </activity>

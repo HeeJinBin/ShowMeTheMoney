@@ -24,7 +24,7 @@ import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
     //아이디 정규식
-    private static final Pattern ID_PATTERN = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,19}$");
+    private static final Pattern ID_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     //비밀번호 정규식
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@.#$%^&*?_~]{6,20}$");
 
@@ -32,18 +32,13 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText edittextID;
     private EditText edittextPassword;
     private EditText edittextPasswordCheck;
-    private Button emailInterlock;
     private Button cancel;
-    private TextView tvInterlock;
 
     private String name;
     private String id;
     private String password;
     private String passwordCheck;
     private String email;
-    private String email_pw;
-    private boolean boolInterlock;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,20 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
         edittextID = findViewById(R.id.et_id_up);
         edittextPassword = findViewById(R.id.et_password_up);
         edittextPasswordCheck = findViewById(R.id.et_password_up_check);
-        tvInterlock = findViewById(R.id.tv_interlock);
         cancel = findViewById(R.id.btn_signup_cancel);
-
-        boolInterlock = false;
-
-        //이메일 연동
-        emailInterlock = findViewById(R.id.btn_email_add);
-        emailInterlock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignUpActivity.this, EmailInterlock.class);
-                startActivityForResult(intent, 1);
-            }
-        });
 
         //회원가입 취소
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
         ApiService apiService = networkHelper.getApiService();
 
         //서버에 POST 수행
-        apiService.signup(name, id, password, passwordCheck, email, email, email_pw).enqueue(new Callback<ResponseSignin>() {
+        apiService.signup(name, id, password, passwordCheck, email).enqueue(new Callback<ResponseSignin>() {
             @Override
             public void onResponse(Call<ResponseSignin> call, Response<ResponseSignin> response) {
                 if(response.isSuccessful()){
@@ -113,17 +95,14 @@ public class SignUpActivity extends AppCompatActivity {
     public void join(View view){
         name = edittextName.getText().toString();
         id = edittextID.getText().toString();
+        email = id;
         password = edittextPassword.getText().toString();
         passwordCheck = edittextPasswordCheck.getText().toString();
 
         if(isValidID()){
             if(isValidPasswd()){
                 if(password.equals(passwordCheck)){
-                    if(boolInterlock){
-                        createUser();
-                    } else{
-                        Toast.makeText(this, "이메일 연동이 필요합니다.",Toast.LENGTH_SHORT).show();
-                    }
+                    createUser();
                 } else{
                     Toast.makeText(this, "비밀번호가 일치하지 않습니다.",Toast.LENGTH_SHORT).show();
                 }
@@ -131,7 +110,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(this, "유효한 비밀번호가 아닙니다.",Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "유효한 아이디가 아닙니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "유효한 아이디 형식이 아닙니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -158,22 +137,6 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         } else {
             return true;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == 1){
-            if(resultCode == RESULT_OK){
-                boolean result = data.getBooleanExtra("result", false);
-                if(result){
-                    email = data.getStringExtra("email");
-                    email_pw = data.getStringExtra("pw");
-
-                    tvInterlock.setText("이메일 연동이 완료되었습니다!");
-                    boolInterlock = true;
-                }
-            }
         }
     }
 }

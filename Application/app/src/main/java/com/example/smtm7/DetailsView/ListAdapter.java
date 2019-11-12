@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class ListAdapter extends BaseAdapter {
     LayoutInflater inflater = null;
-    private ArrayList<TransactionItem> data =null;
-    private int count =0;
+    private ArrayList<TransactionItem> data = null;
+    private int count = 0;
 
     public ListAdapter(ArrayList<TransactionItem> data){
         this.data = data;
@@ -43,7 +43,7 @@ public class ListAdapter extends BaseAdapter {
             if(inflater == null){
                 inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             }
-            convertView = inflater.inflate(R.layout.search_item_transaction,parent,false);
+            convertView = inflater.inflate(R.layout.search_item_transaction, parent,false);
         }
         TextView item = convertView.findViewById(R.id.tv_item);
         TextView date = convertView.findViewById(R.id.tv_date_item);

@@ -3,12 +3,10 @@ package com.example.smtm7.Connection;
 public class ResponseLogin {
     private String message;
     private String nickname;
-    private String token;
 
-    public ResponseLogin(String message, String nickname, String token){
+    public ResponseLogin(String message, String nickname){
         this.message = message;
         this.nickname = nickname;
-        this.token = token;
     }
 
     public String getResult() {
@@ -17,9 +15,5 @@ public class ResponseLogin {
 
     public String getNickname(){
         return nickname;
-    }
-
-    public String getToken(){
-        return token;
     }
 }

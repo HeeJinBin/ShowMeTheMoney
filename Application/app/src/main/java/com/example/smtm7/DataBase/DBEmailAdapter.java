@@ -9,13 +9,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBEmailAdapter {
     public static final String EMAIL = "email";
+    public static final String PW = "pw";
     public static final String INDEXS = "indexs";
 
     private DatabaseEHelper databaseHelper;
     private SQLiteDatabase database;
 
     private static final String DATABASE_ECREATE =
-            "create table if not exists email_table (email text primary key not null, indexs integer not null);";
+            "create table if not exists email_table (email text primary key not null, pw text not null, indexs integer not null);";
 
     private static final String DATABASE_ENAME = "email_db";
     private static final String DATABASE_ETABLE = "email_table";
@@ -55,27 +56,29 @@ public class DBEmailAdapter {
         databaseHelper.close();
     }
 
-    public long insertEmail(String email, int indexs) {
+    public long insertEmail(String email, String pw, int indexs) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(EMAIL, email);
+        contentValues.put(PW, pw);
         contentValues.put(INDEXS, indexs);
 
         return database.insert(DATABASE_ETABLE, null, contentValues);
     }
 
     public Cursor searchAllEmail() {
-        return database.query(DATABASE_ETABLE, new String[] { EMAIL, INDEXS }, null, null, null, null, null);
+        return database.query(DATABASE_ETABLE, new String[] { EMAIL, PW, INDEXS }, null, null, null, null, null);
     }
 
-    public boolean updateEmail(String email, int indexs) {
+    public boolean updateEmail(String email, String pw, int indexs) {
         ContentValues args = new ContentValues();
         args.put(EMAIL, email);
+        args.put(PW, pw);
         args.put(INDEXS, indexs);
-        return database.update(DATABASE_ETABLE, args, EMAIL + "=" + email, null) > 0;
+        return database.update(DATABASE_ETABLE, args, "email='"+ email+"'", null) > 0;
     }
 
     public void deleteAllEmail(){
-        String sql = "delete from "+DATABASE_ETABLE;
+        String sql = "delete from "+DATABASE_ETABLE+";";
         database.execSQL(sql);
     }
 }

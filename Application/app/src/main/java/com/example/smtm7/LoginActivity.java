@@ -18,10 +18,12 @@ import com.example.smtm7.AirButton.FloatingActivity;
 import com.example.smtm7.Connection.ApiService;
 import com.example.smtm7.Connection.NetworkHelper;
 import com.example.smtm7.Connection.ResponseLogin;
+import com.example.smtm7.Connection.ResponseToken;
 import com.example.smtm7.Connection.ResponseTransaction;
 import com.example.smtm7.DataBase.DBEmailAdapter;
 import com.example.smtm7.DataBase.DBTransactionAdapter;
 import com.example.smtm7.DataBase.SharedPreferenceBase;
+import com.example.smtm7.InitialSetting.EmailInterlock;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -34,7 +36,7 @@ import retrofit2.http.Header;
 
 public class LoginActivity extends AppCompatActivity {
     //아이디 정규식
-    private static final Pattern ID_PATTERN = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,19}$");
+    private static final Pattern ID_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     //비밀번호 정규식
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@.#$%^&*?_~]{6,20}$");
 
@@ -67,12 +69,12 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.et_password);
         visibility = findViewById(R.id.visible_pw);
 
-        visibility.setOnClickListener(new View.OnClickListener(){
+        visibility.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(count_visibility%2==0){
+                if (count_visibility % 2 == 0) {
                     editTextPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                } else{
+                } else {
                     editTextPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 }
                 count_visibility++;
@@ -90,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         id = editTextID.getText().toString();
         password = editTextPassword.getText().toString();
 
-        if(isValidID() && isValidPasswd()) {
+        if (isValidID() && isValidPasswd()) {
             loginUser();
         }
     }
@@ -122,28 +124,51 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // 로그인
-    private void loginUser(){
+    private void loginUser() {
         NetworkHelper networkHelper = new NetworkHelper();
         final ApiService apiService = networkHelper.getApiService();
 
         //서버에 POST 수행
-        apiService.login(id,password).enqueue(new Callback<ResponseLogin>() {
+        apiService.login(id, password).enqueue(new Callback<ResponseToken>() {
             @Override
-            public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
-                if(response.isSuccessful()){
-                    ResponseLogin body = response.body();
+            public void onResponse(Call<ResponseToken> call, Response<ResponseToken> response) {
+                if (response.isSuccessful()) {
+                    final ResponseToken body = response.body();
+                    final String accessToken = "Bearer " + body.getAccess();
 
-                    if(body.getResult().equals("Login Success")){
-                        // 로그인 성공
-                        Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
-                        Log.d("Token", body.getToken());
+                    final SharedPreferenceBase sharedPreferenceBase = SharedPreferenceBase.getInstance(getApplicationContext());
+                    sharedPreferenceBase.setString("access", accessToken);
+                    sharedPreferenceBase.setString("refresh", body.getRefresh());
 
-                        SharedPreferenceBase sharedPreferenceBase = SharedPreferenceBase.getInstance(getApplicationContext());
-                        sharedPreferenceBase.setString("id", id);
-                        sharedPreferenceBase.setString("nickname", body.getNickname());
-                        sharedPreferenceBase.setString("token", body.getToken());
+                    Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                        //거래내역 데이터 받아오기
+                    //nickname 받아오기
+                    apiService.getnickname(accessToken, id, password).enqueue(new Callback<ResponseLogin>() {
+                        @Override
+                        public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
+                            if (response.isSuccessful()) {
+                                ResponseLogin bodyLogin = response.body();
+
+                                if (bodyLogin.getResult().equals("Login Success")) {
+                                    sharedPreferenceBase.setString("id", id);
+                                    sharedPreferenceBase.setString("nickname", bodyLogin.getNickname());
+
+                                    Intent intent = new Intent(LoginActivity.this, EmailInterlock.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseLogin> call, Throwable t) {
+                            Toast.makeText(LoginActivity.this, "Server 연결 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            //거래내역 데이터 받아오기
 //                        apiService.getTransaction(id).enqueue(new Callback<List<ResponseTransaction>>() {
 //                            @Override
 //                            public void onResponse(Call<List<ResponseTransaction>> call, Response<List<ResponseTransaction>> response) {
@@ -169,19 +194,9 @@ public class LoginActivity extends AppCompatActivity {
 //
 //                        Intent intent = new Intent(LoginActivity.this, FloatingActivity.class);
 //                        startActivity(intent);
-//                        sharedPreferenceBase.setString("context","floating");
 //                        finish();
-                    } else {
-                        // 로그인 실패
-                        Toast.makeText(LoginActivity.this, body.getResult(), Toast.LENGTH_SHORT).show();
-                    }
-                } else{
-                    Toast.makeText(LoginActivity.this, "연결은 했는데 응답 없음", Toast.LENGTH_SHORT).show();
-                }
-            }
-
             @Override
-            public void onFailure(Call<ResponseLogin> call, Throwable t) {
+            public void onFailure(Call<ResponseToken> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "Server 연결 실패", Toast.LENGTH_SHORT).show();
             }
         });

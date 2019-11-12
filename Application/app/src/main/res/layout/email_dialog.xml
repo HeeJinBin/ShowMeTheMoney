@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="연동 이메일 추가"
+        android:textSize="20dp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+
+    <View
+        android:id="@+id/gray_line_email_plus"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:text="이메일"
+        android:textColor="@android:color/black"
+        android:textSize="13dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"/>
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:text="비밀번호"
+        android:textColor="@android:color/black"
+        android:textSize="13dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"/>
+
+    <EditText
+        android:id="@+id/et_email_pw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:inputType="textPassword"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="30dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/email_add"
+            android:gravity="center"
+            android:text="추가"
+            android:textSize="20dp"
+            android:textColor="@android:color/white"
+            android:background="@color/colorMain"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/email_cancel"
+            android:text="취소"
+            android:textSize="20dp"
+            android:textColor="@color/colorMain"
+            android:background="@drawable/btn_shape"/>
+
+    </LinearLayout>
+</LinearLayout>
