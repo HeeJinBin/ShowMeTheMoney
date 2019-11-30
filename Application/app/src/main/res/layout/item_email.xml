@@ -34,4 +34,18 @@
         android:textColor="@android:color/black"
         android:gravity="center"/>
 
+    <Button
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_email_minus"
+        android:gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_gravity="center"
+        android:text="-"
+        android:textSize="30dp"
+        android:textColor="@color/colorMain"
+        android:textStyle="bold"
+        android:background="#00ff0000"/>
+
 </LinearLayout>

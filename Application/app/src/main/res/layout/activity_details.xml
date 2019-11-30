@@ -6,14 +6,52 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:background="@android:color/darker_gray"
     tools:context=".DetailsView.DetailsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/loading_layout"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="2dp"
+        android:gravity="center"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:visibility="gone"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/loading_image"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/loading_text"
+            android:textSize="14dp"
+            android:textColor="@android:color/black"
+            android:text="거래내역이 업데이트 되었습니다."/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/loading_btn"
+            android:text="Update"
+            android:textColor="@color/colorMain"
+            android:background="#00ff0000"
+            android:textSize="14dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:layout_below="@+id/loading_layout"
         android:layout_above="@+id/linearLayout">
 
         <FrameLayout
@@ -32,6 +70,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:background="@android:color/white"
         android:id="@+id/linearLayout">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

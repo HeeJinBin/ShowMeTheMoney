@@ -6,10 +6,11 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smtm7.AirButton.FloatingActivity;
+import com.example.smtm7.DataBase.DBEmailAdapter;
 import com.example.smtm7.DataBase.SharedPreferenceBase;
 
 public class ScreenActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,16 +18,28 @@ public class ScreenActivity extends AppCompatActivity {
         //시작 전에 splash 화면 띄우기
 
         SharedPreferenceBase sharedPreferenceBase = new SharedPreferenceBase(this);
+
         if(sharedPreferenceBase.getString("access").equals("")){
+            sharedPreferenceBase.setString("login", "False");
+            sharedPreferenceBase.setString("airbutton","True");
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
-        } else {
-            //여기서 본인 인증으로 넘어가게
+        } else{
+            if(sharedPreferenceBase.getString("login").equals("True")) {
+                Intent intent = new Intent(this, Certification.class);
+                startActivity(intent);
+                finish();
+            } else{
+                DBEmailAdapter emailAdapter = new DBEmailAdapter(this);
+                emailAdapter.open();
+                emailAdapter.deleteAllEmail();
+                emailAdapter.close();
 
-            Intent intent = new Intent(this, FloatingActivity.class);
-            startActivity(intent);
-            finish();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ public class DBTransactionAdapter {
         @Override
         public void onCreate(SQLiteDatabase db) {
             String sql = "create table if not exists transaction_table (_id integer primary key autoincrement, "+
-                    "pg text not null, date text not null, office text, item text not null, price integer not null)";
+                    "pg text not null, date integer not null, office text, item text not null, price integer not null)";
             db.execSQL(sql);
         }
 
@@ -61,7 +61,7 @@ public class DBTransactionAdapter {
         databaseHelper.close();
     }
 
-    public long insertTransaction(String pg, String date, String office, String item, int price) {
+    public long insertTransaction(String pg, int date, String office, String item, int price) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(PG, pg);
         contentValues.put(DATE, date);
@@ -76,10 +76,11 @@ public class DBTransactionAdapter {
     }
 
     public Cursor searchAllTransaction() {
-        return database.query(DATABASE_TTABLE, new String[] { ROW_ID, PG, DATE, OFFICE, ITEM, PRICE }, null, null, null, null, DATE);
+        String sql = "select * from "+DATABASE_TTABLE+" order by date desc;";
+        return database.rawQuery(sql, null);
     }
 
-    public Cursor searchTransaction(ArrayList<String> pglist, String date, int price){
+    public Cursor searchTransaction(ArrayList<String> pglist, int firstDate, int secondDate, int firstPrice, int secondPrice){
         String sql = "select * from "+DATABASE_TTABLE;
 
         String pgquery = "";
@@ -95,13 +96,13 @@ public class DBTransactionAdapter {
         }
 
         String datequery = "";
-        if(date!=null){
-            datequery+="date = '"+date+"'";
+        if(firstDate!= -1){
+            datequery+="( date >='"+firstDate+"' and date <= '"+secondDate+"' )";
         }
 
         String pricequery = "";
-        if(price != -1){
-            pricequery += "price = '"+price+"'";
+        if(firstPrice != -1){
+            pricequery += "( price >= '"+firstPrice+"' and price <= '"+secondPrice+"' )";
         }
 
         if(!pgquery.equals("")){
@@ -125,9 +126,9 @@ public class DBTransactionAdapter {
             }
         }
 
-        sql+=" order by date;";
+        sql+=" order by date desc;";
 
-        Log.d("DB Transaction", sql);
+        Log.d("DBTransaction", sql);
 
         return database.rawQuery(sql, null);
     }

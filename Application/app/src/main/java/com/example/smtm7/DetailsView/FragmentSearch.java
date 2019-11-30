@@ -61,8 +61,9 @@ public class FragmentSearch extends Fragment implements SwipeRefreshLayout.OnRef
 
             DecimalFormat decimalFormat = new DecimalFormat("#,###");
             String price = decimalFormat.format(Double.parseDouble(cursor.getString(5)))+"원";
+            String date = cursor.getString(2).substring(0,4)+"-"+cursor.getString(2).substring(4,6)+"-"+cursor.getString(2).substring(6,8);
 
-            TransactionItem item = new TransactionItem(cursor.getString(1),cursor.getString(2),office,cursor.getString(4),price);
+            TransactionItem item = new TransactionItem(cursor.getString(1),date,office,cursor.getString(4),price);
             itemList.add(item);
             cursor.moveToNext();
         }
@@ -83,23 +84,31 @@ public class FragmentSearch extends Fragment implements SwipeRefreshLayout.OnRef
         NetworkHelper networkHelper = new NetworkHelper();
         ApiService apiService = networkHelper.getApiService();
 
-        SharedPreferenceBase sharedPreferenceBase = new SharedPreferenceBase(getContext());
+        final SharedPreferenceBase sharedPreferenceBase = new SharedPreferenceBase(getContext());
 
-        apiService.getTransaction(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id")).enqueue(new Callback<List<ResponseTransaction>>() {
+        apiService.getTransaction(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id"), Integer.parseInt(sharedPreferenceBase.getString("transactionIndex"))).enqueue(new Callback<List<ResponseTransaction>>() {
             @Override
             public void onResponse(Call<List<ResponseTransaction>> call, Response<List<ResponseTransaction>> response) {
                 if(response.isSuccessful()){
                     List<ResponseTransaction> resource = response.body();
 
+                    int index = Integer.parseInt(sharedPreferenceBase.getString("transactionIndex"));
                     transactionAdapter.open();
 
+                    Log.d("transactionIndex", "first index: "+index);
                     //내부 DB에 저장 (Transaction)
                     for(ResponseTransaction re : resource){
-                        transactionAdapter.insertTransaction(re.getPGname(), re.getDate(), re.getPurchasing_office(), re.getPurchasing_item(), re.getPrice());
-                        Log.d("GETTRANSACTION", re.getPGname()+" "+re.getDate()+" "+re.getPurchasing_office()+" "+re.getPurchasing_item()+" "+re.getPrice());
+                        index++;
+                        Log.d("TAG", re.getDate());
+                        int date = Integer.parseInt(re.getDate().replace("-",""));
+                        transactionAdapter.insertTransaction(re.getPGname(), date, re.getPurchasing_office(), re.getPurchasing_item(), re.getPrice());
+                        Log.d("TAG", re.getPGname()+" "+date+" "+re.getPurchasing_office()+" "+re.getPurchasing_item()+" "+re.getPrice());
                     }
-                    transactionAdapter.close();
 
+                    Log.d("transactionIndex", "update index: "+index);
+
+                    transactionAdapter.close();
+                    sharedPreferenceBase.setString("transactionIndex", Integer.toString(index));
                     updateList();
                 }
             }
@@ -109,14 +118,13 @@ public class FragmentSearch extends Fragment implements SwipeRefreshLayout.OnRef
 
             }
         });
-
         //새로고침 아이콘 삭제
         swipeRefreshLayout.setRefreshing(false);
     }
 
     public void updateList(){
         transactionAdapter.open();
-        //transactionAdapter.deleteAllTransaction();
+        itemList.clear();
 
         Cursor cursor = transactionAdapter.searchAllTransaction();
         cursor.moveToFirst();
@@ -129,7 +137,10 @@ public class FragmentSearch extends Fragment implements SwipeRefreshLayout.OnRef
             DecimalFormat decimalFormat = new DecimalFormat("#,###");
             String price = decimalFormat.format(Double.parseDouble(cursor.getString(5)))+"원";
 
-            TransactionItem item = new TransactionItem(cursor.getString(1),cursor.getString(2),office,cursor.getString(4),price);
+            String date = cursor.getString(2).substring(0,4)+"-"+cursor.getString(2).substring(4,6)+"-"+cursor.getString(2).substring(6,8);
+
+            TransactionItem item = new TransactionItem(cursor.getString(1),date,office,cursor.getString(4),price);
+            Log.d("TAG", cursor.getString(1)+date+office+cursor.getString(4)+price);
             itemList.add(item);
             cursor.moveToNext();
         }

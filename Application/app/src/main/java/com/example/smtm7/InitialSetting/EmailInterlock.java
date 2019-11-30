@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,14 +18,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.smtm7.AirButton.FloatingActivity;
+import com.example.smtm7.Certification;
 import com.example.smtm7.Connection.ApiService;
 import com.example.smtm7.Connection.NetworkHelper;
+import com.example.smtm7.Connection.ResponseTransaction;
 import com.example.smtm7.Connection.ResponseUpdate;
 import com.example.smtm7.DataBase.DBEmailAdapter;
+import com.example.smtm7.DataBase.DBTransactionAdapter;
 import com.example.smtm7.DataBase.SharedPreferenceBase;
 import com.example.smtm7.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,10 +41,9 @@ public class EmailInterlock extends AppCompatActivity {
     private ImageButton email_add;
 
     private int count;
-    private ListView listView;
-    private EmailListAdapter listAdapter;
-    private ArrayList<EmailItem> itemList;
-
+    public static ListView listView;
+    public static EmailListAdapter listAdapter;
+    public static ArrayList<EmailItem> itemList;
     private DBEmailAdapter emailAdapter;
 
     @Override
@@ -93,17 +98,16 @@ public class EmailInterlock extends AppCompatActivity {
                 if(itemList.size()==0){
                     Toast.makeText(getApplicationContext(),"이메일을 1개 이상 연동해야 합니다.",Toast.LENGTH_SHORT).show();
                 } else {
-                    //본인 인증 설정으로 넘어가깅
-
                     //거래내역 업데이트 하라고 요청
                     NetworkHelper networkHelper = new NetworkHelper();
                     final ApiService apiService = networkHelper.getApiService();
 
-                    SharedPreferenceBase sharedPreferenceBase = new SharedPreferenceBase(getApplicationContext());
+                    final SharedPreferenceBase sharedPreferenceBase = new SharedPreferenceBase(getApplicationContext());
                     for(int i=0;i<itemList.size();i++){
                         final int finalI = i;
-                        final String[] array = itemList.get(0).getEmail().split("@");
-                        apiService.updatelist(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id"), array[0], itemList.get(0).getPw(), itemList.get(0).getIndexs()).enqueue(new Callback<ResponseUpdate>() {
+                        final String[] array = itemList.get(i).getEmail().split("@");
+
+                        apiService.updatelist(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id"), array[i], itemList.get(0).getPw(), itemList.get(0).getIndexs()).enqueue(new Callback<ResponseUpdate>() {
                             @Override
                             public void onResponse(Call<ResponseUpdate> call, Response<ResponseUpdate> response) {
                                 if (response.isSuccessful()) {
@@ -113,7 +117,8 @@ public class EmailInterlock extends AppCompatActivity {
                                         emailAdapter.open();
                                         emailAdapter.updateEmail(itemList.get(finalI).getEmail(),itemList.get(finalI).getPw(),body.getIndex());
                                         emailAdapter.close();
-                                        //Toast.makeText(getApplicationContext(),"Email update complete "+ body.getIndex(), Toast.LENGTH_LONG).show();
+                                        Log.d("Email", itemList.get(finalI).getEmail());
+                                        Toast.makeText(getApplicationContext(),"Email update complete "+ body.getIndex(), Toast.LENGTH_LONG).show();
                                     }
                                 } else{
                                     Toast.makeText(EmailInterlock.this, "Response 못 받음", Toast.LENGTH_LONG).show();
@@ -127,7 +132,14 @@ public class EmailInterlock extends AppCompatActivity {
                         });
                     }
 
-                    Intent intent = new Intent(EmailInterlock.this, FloatingActivity.class);
+                    DBTransactionAdapter transactionAdapter = new DBTransactionAdapter(getApplicationContext());
+                    transactionAdapter.open();
+                    transactionAdapter.deleteAllTransaction();
+                    transactionAdapter.close();
+
+                    sharedPreferenceBase.setString("transactionIndex",Integer.toString(0));
+
+                    Intent intent = new Intent(EmailInterlock.this, CertificationSetting.class);
                     startActivity(intent);
                     finish();
                 }

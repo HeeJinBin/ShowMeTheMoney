@@ -1,17 +1,15 @@
 package com.example.smtm7.Connection;
 
 import java.util.List;
-import java.util.Map;
-
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.HeaderMap;
-import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
+import retrofit2.http.Part;
 
 public interface ApiService {
 
@@ -44,5 +42,20 @@ public interface ApiService {
     //거래내역 받아오기
     @FormUrlEncoded
     @POST("/accounts/datalist/")
-    Call<List<ResponseTransaction>> getTransaction(@Header("Authorization") String token, @Field("username") String username);
+    Call<List<ResponseTransaction>> getTransaction(@Header("Authorization") String token, @Field("username") String username, @Field("myIndex") int index);
+
+    //OCR
+    @Multipart
+    @POST("/upload/")
+    Call<ResponseBody> upload(@Part MultipartBody.Part file);
+
+    //OCR
+    @Multipart
+    @POST("/ocr/")
+    Call<ResponseOCR> getOCR(@Part MultipartBody.Part file);
+
+//    //암복호화
+//    @FormUrlEncoded
+//    @POST("/aestest/")
+//    Call<ResponseCipher> getCipher(@Header("Authorization") String token, @Field("userpassword") String password, @Field("key") String key);
 }

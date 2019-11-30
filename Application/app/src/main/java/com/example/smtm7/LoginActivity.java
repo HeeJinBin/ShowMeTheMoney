@@ -94,6 +94,8 @@ public class LoginActivity extends AppCompatActivity {
 
         if (isValidID() && isValidPasswd()) {
             loginUser();
+        } else {
+            Toast.makeText(this,"올바른 형식의 입력이 아닙니다.",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -141,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                     sharedPreferenceBase.setString("refresh", body.getRefresh());
 
                     Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                    Log.d("access", accessToken);
 
                     //nickname 받아오기
                     apiService.getnickname(accessToken, id, password).enqueue(new Callback<ResponseLogin>() {

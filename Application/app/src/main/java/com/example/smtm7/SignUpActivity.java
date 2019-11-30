@@ -39,6 +39,7 @@ public class SignUpActivity extends AppCompatActivity {
     private String password;
     private String passwordCheck;
     private String email;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

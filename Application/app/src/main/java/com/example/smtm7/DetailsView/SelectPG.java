@@ -83,4 +83,10 @@ public class SelectPG extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DetailsActivity.screenCheck = true;
+    }
 }

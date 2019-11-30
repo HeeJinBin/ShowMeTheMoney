@@ -35,8 +35,10 @@ public class FragmentFiltering extends Fragment {
     private DBTransactionAdapter transactionAdapter;
 
     private ArrayList<String> PGfilter;
-    private String Datefilter;
-    private int Pricefilter;
+    private int FirstDate;
+    private int SecondDate;
+    private int FirstPrice;
+    private int SecondPrice;
 
     private Context context;
 
@@ -62,12 +64,12 @@ public class FragmentFiltering extends Fragment {
 
         //filter 초기화
         PGfilter = new ArrayList<>();
-        Datefilter = null;
-        Pricefilter = -1;
+        FirstDate = SecondDate = FirstPrice = SecondPrice = -1;
 
         selectPG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DetailsActivity.screenCheck = false;
                 Intent intent = new Intent(context, SelectPG.class);
                 startActivityForResult(intent, PG);
             }
@@ -76,6 +78,7 @@ public class FragmentFiltering extends Fragment {
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DetailsActivity.screenCheck = false;
                 Intent intent = new Intent(context, SelectDate.class);
                 startActivityForResult(intent, DATE);
             }
@@ -84,6 +87,7 @@ public class FragmentFiltering extends Fragment {
         selectPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DetailsActivity.screenCheck = false;
                 Intent intent = new Intent(context, SelectPrice.class);
                 startActivityForResult(intent, PRICE);
             }
@@ -126,9 +130,10 @@ public class FragmentFiltering extends Fragment {
                             textPG+=",";
                     }
 
-                    if(textPG.length()>10) {
-                        textPG = textPG.substring(0,9);
-                        textPG+="..";
+                    String text[] = textPG.split(",");
+
+                    if(text.length>2) {
+                        textPG = text[0]+","+text[1]+"..";
                     }
 
                     selectPG.setText(textPG);
@@ -138,13 +143,17 @@ public class FragmentFiltering extends Fragment {
         }
         else if(requestCode == DATE){
             if(resultCode == RESULT_OK){
-                Datefilter = data.getStringExtra("Date");
+                FirstDate = SecondDate = -1;
+                String result = data.getStringExtra("Check");
 
-                if(Datefilter != null){
-                    selectDate.setText(Datefilter);
+                if(result.equals("True")){
+                    FirstDate = Integer.parseInt(data.getStringExtra("First").replace("-",""));
+                    SecondDate = Integer.parseInt(data.getStringExtra("Second").replace("-",""));
+
+                    selectDate.setText(data.getStringExtra("First").substring(2).replace("-",".")+"~"+data.getStringExtra("Second").substring(2).replace("-","."));
                     selectDate.setBackground(ContextCompat.getDrawable(context, R.drawable.btn_shape));
                     selectDate.setTextColor(ContextCompat.getColor(context, R.color.colorMain));
-                    Log.d("DateFilter", Datefilter);
+                    Log.d("DateFilter", FirstDate+"~"+SecondDate);
                 } else{ //선택을 안한 경우
                     selectDate.setText("날짜");
                     selectDate.setTextColor(Color.BLACK);
@@ -156,15 +165,15 @@ public class FragmentFiltering extends Fragment {
         }
         else if(requestCode == PRICE){
             if(resultCode == RESULT_OK){
-                Pricefilter = -1;
+                FirstPrice = SecondPrice = -1;
+                String result = data.getStringExtra("PriceCheck");
                 DecimalFormat decimalFormat = new DecimalFormat("#,###");
-                String price = data.getStringExtra("price");
-                Log.d("PriceFilter", price);
-                if(!price.equals(""))
-                    Pricefilter = Integer.parseInt(price);
 
-                if(Pricefilter != -1){
-                    selectPrice.setText(decimalFormat.format(Double.parseDouble(Integer.toString(Pricefilter)))+"원");
+                if(result.equals("True")){
+                    FirstPrice = Integer.parseInt(data.getStringExtra("price1"));
+                    SecondPrice = Integer.parseInt(data.getStringExtra("price2"));
+
+                    selectPrice.setText(decimalFormat.format(Double.parseDouble(Integer.toString(FirstPrice)))+"~"+decimalFormat.format(Double.parseDouble(Integer.toString(SecondPrice))));
                     selectPrice.setBackground(ContextCompat.getDrawable(context, R.drawable.btn_shape));
                     selectPrice.setTextColor(ContextCompat.getColor(context, R.color.colorMain));
                 } else{
@@ -180,9 +189,9 @@ public class FragmentFiltering extends Fragment {
 
     public void updateListView(){
         itemList.clear();
-        if(PGfilter.size()!=0 || Datefilter!=null || Pricefilter!=-1) {
+        if(PGfilter.size()!=0 || FirstDate!=-1 || FirstPrice!=-1) {
             transactionAdapter.open();
-            Cursor cursor = transactionAdapter.searchTransaction(PGfilter, Datefilter, Pricefilter);
+            Cursor cursor = transactionAdapter.searchTransaction(PGfilter, FirstDate, SecondDate, FirstPrice, SecondPrice);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String office = "";
@@ -192,10 +201,10 @@ public class FragmentFiltering extends Fragment {
 
                 DecimalFormat decimalFormat = new DecimalFormat("#,###");
                 String price = decimalFormat.format(Double.parseDouble(cursor.getString(5))) + "원";
+                String date = cursor.getString(2).substring(0,4)+"-"+cursor.getString(2).substring(4,6)+"-"+cursor.getString(2).substring(6,8);
 
-                TransactionItem item = new TransactionItem(cursor.getString(1), cursor.getString(2), office, cursor.getString(4), price);
+                TransactionItem item = new TransactionItem(cursor.getString(1), date, office, cursor.getString(4), price);
 
-                Log.d("Date", cursor.getString(2));
                 itemList.add(item);
                 cursor.moveToNext();
             }

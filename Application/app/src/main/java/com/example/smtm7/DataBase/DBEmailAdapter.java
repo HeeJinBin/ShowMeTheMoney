@@ -15,8 +15,7 @@ public class DBEmailAdapter {
     private DatabaseEHelper databaseHelper;
     private SQLiteDatabase database;
 
-    private static final String DATABASE_ECREATE =
-            "create table if not exists email_table (email text primary key not null, pw text not null, indexs integer not null);";
+    private static final String DATABASE_ECREATE = "create table if not exists email_table (email text primary key not null, pw text not null, indexs integer not null);";
 
     private static final String DATABASE_ENAME = "email_db";
     private static final String DATABASE_ETABLE = "email_table";
@@ -65,6 +64,11 @@ public class DBEmailAdapter {
         return database.insert(DATABASE_ETABLE, null, contentValues);
     }
 
+    public Cursor searchEmail(String email){
+        String sql = "select * from "+DATABASE_ETABLE+" where email = '"+email+"';";
+        return database.rawQuery(sql, null);
+    }
+
     public Cursor searchAllEmail() {
         return database.query(DATABASE_ETABLE, new String[] { EMAIL, PW, INDEXS }, null, null, null, null, null);
     }
@@ -75,6 +79,11 @@ public class DBEmailAdapter {
         args.put(PW, pw);
         args.put(INDEXS, indexs);
         return database.update(DATABASE_ETABLE, args, "email='"+ email+"'", null) > 0;
+    }
+
+    public void deleteEmail(String email){
+        String sql = "delete from "+DATABASE_ETABLE+" where email='"+email+"'";
+        database.execSQL(sql);
     }
 
     public void deleteAllEmail(){

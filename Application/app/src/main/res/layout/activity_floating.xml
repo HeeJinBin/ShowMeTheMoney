@@ -11,6 +11,7 @@
         android:id="@+id/first_overlay"
         android:clickable="true"
         android:visibility="visible">
+
         <ImageButton
             android:id="@+id/floating_button"
             android:layout_width="60dp"
@@ -19,35 +20,36 @@
             android:scaleType="fitCenter"
             android:background="@drawable/air_button_money_icon"
             android:src="@drawable/air_button_money" />
+
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/second_overlay"
         android:clickable="false"
         android:visibility="gone"
-        android:orientation="horizontal">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxHeight="60dp"
+            android:maxWidth="60dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:id="@+id/capture_button"
+            android:background="@drawable/air_button_capture_icon"
+            android:src="@drawable/air_button_capture"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/overlay_menu_layout"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxHeight="60dp"
-                android:maxWidth="60dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:layout_gravity="center"
-                android:id="@+id/capture_button"
-                android:background="@drawable/air_button_capture_icon"
-                android:src="@drawable/air_button_capture"
-                android:layout_marginBottom="15dp"/>
+            android:orientation="horizontal">
 
             <ImageButton
                 android:layout_width="60dp"
@@ -58,17 +60,46 @@
                 android:id="@+id/app_button"
                 android:background="@drawable/air_button_app_icon"
                 android:src="@drawable/air_button_app"/>
+
+            <ImageButton
+                android:layout_gravity="center"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="30dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:id="@+id/overlay_back_button"
+                android:background="@drawable/air_button_cancel_icon"
+                android:src="@drawable/air_button_cancel"
+                android:layout_alignParentRight="true"/>
         </LinearLayout>
+
         <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:id="@+id/delete_button"
+            android:background="@drawable/air_button_delete_icon"
+            android:src="@drawable/air_button_delete"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/third_overlay"
+        android:clickable="false"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/capture_or_back_button"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:layout_marginLeft="5dp"
-            android:id="@+id/overlay_back_button"
-            android:background="@drawable/air_button_cancel_icon"
-            android:src="@drawable/air_button_cancel"
-            android:layout_alignParentRight="true"/>
+            android:background="@drawable/air_button_money_icon"
+            android:src="@drawable/air_button_money" />
     </LinearLayout>
+
 </LinearLayout>

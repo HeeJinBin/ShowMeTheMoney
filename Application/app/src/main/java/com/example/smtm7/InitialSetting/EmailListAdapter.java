@@ -1,15 +1,21 @@
 package com.example.smtm7.InitialSetting;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.smtm7.DataBase.DBEmailAdapter;
 import com.example.smtm7.R;
 
 import java.util.ArrayList;
+
+import static com.example.smtm7.InitialSetting.EmailInterlock.itemList;
+import static com.example.smtm7.InitialSetting.EmailInterlock.listAdapter;
 
 public class EmailListAdapter extends BaseAdapter {
     LayoutInflater inflater = null;
@@ -37,7 +43,7 @@ public class EmailListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if(convertView==null){
             final Context context = parent.getContext();
             if(inflater == null){
@@ -51,6 +57,30 @@ public class EmailListAdapter extends BaseAdapter {
 
         index.setText(Integer.toString(position+1));
         info.setText(data.get(position).getEmail());
+
+        Button cancelButton = (Button)convertView.findViewById(R.id.btn_email_minus);
+        final View finalConvertView = convertView;
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBEmailAdapter emailAdapter = new DBEmailAdapter(finalConvertView.getContext());
+                emailAdapter.open();
+                emailAdapter.deleteEmail(itemList.get(position).getEmail());
+
+                itemList.clear();
+                Cursor cursor = emailAdapter.searchAllEmail();
+                cursor.moveToFirst();
+                while(!cursor.isAfterLast()){
+                    EmailItem item = new EmailItem(cursor.getString(0),cursor.getString(1),cursor.getInt(2));
+                    itemList.add(item);
+                    cursor.moveToNext();
+                }
+                listAdapter = new EmailListAdapter(itemList);
+                EmailInterlock.listView.setAdapter(listAdapter);
+
+                emailAdapter.close();
+            }
+        });
 
         return convertView;
     }

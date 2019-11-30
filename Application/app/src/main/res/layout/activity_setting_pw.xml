@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pw_setting_back"
+        android:gravity="start|center_vertical"
+        android:text="&lt;"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="30dp"
+        android:background="#00ff0000"
+        android:textColor="@android:color/darker_gray"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="비밀번호 확인"
+        android:textColor="@android:color/black"
+        android:textSize="25dp"
+        android:id="@+id/tv_pw_setting_top"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_pw_setting_top"
+        android:id="@+id/tv_pw_setting_info"
+        android:text="비밀번호 변경을 위해 기존 비밀번호를 입력해주세요."
+        android:textSize="15dp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:id="@+id/btn_pw_setting_layout"
+        android:layout_marginBottom="100dp"
+        android:layout_below="@id/tv_pw_setting_info">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_pw_setting_1"
+            android:src="@drawable/password"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="#00ff0000"/>
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_pw_setting_2"
+            android:src="@drawable/password"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="#00ff0000"/>
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_pw_setting_3"
+            android:src="@drawable/password"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="#00ff0000"/>
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_pw_setting_4"
+            android:src="@drawable/password"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="#00ff0000"/>
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/btn_pw_setting_5"
+            android:src="@drawable/password"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="#00ff0000"/>
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:id="@+id/btn_pw_setting_6"
+            android:src="@drawable/password"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="#00ff0000"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/btn_pw_setting_layout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_1"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_1_icon"
+                android:src="@drawable/button_1"/>
+
+            <View
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_2"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_2_icon"
+                android:src="@drawable/button_2"/>
+
+            <View
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_3"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_3_icon"
+                android:src="@drawable/button_3"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_4"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_4_icon"
+                android:src="@drawable/button_4"/>
+
+            <View
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_5"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_5_icon"
+                android:src="@drawable/button_5"/>
+
+            <View
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_6"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_6_icon"
+                android:src="@drawable/button_6"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_7"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_7_icon"
+                android:src="@drawable/button_7"/>
+
+            <View
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_8"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_8_icon"
+                android:src="@drawable/button_8"/>
+
+            <View
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_9"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_9_icon"
+                android:src="@drawable/button_9"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_x"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_x_icon"
+                android:src="@drawable/button_x"/>
+
+            <View
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_0"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_0_icon"
+                android:src="@drawable/button_0"/>
+
+            <View
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/button_setting_cancel"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="@drawable/button_cancel_icon"
+                android:src="@drawable/button_cancel"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

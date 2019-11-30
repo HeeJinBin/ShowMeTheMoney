@@ -1,10 +1,13 @@
 package com.example.smtm7.DetailsView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,12 +16,14 @@ import androidx.fragment.app.Fragment;
 
 import com.example.smtm7.DataBase.SharedPreferenceBase;
 import com.example.smtm7.R;
+import com.kyleduo.switchbutton.SwitchButton;
 
 public class FragmentProfile extends Fragment {
 
     private TextView username;
     private Button btnEmail;
-    private Button btnWidget;
+    private Button btnPw;
+    private SwitchButton switchButton;
 
     @Nullable
     @Override
@@ -27,22 +32,46 @@ public class FragmentProfile extends Fragment {
 
         username = view.findViewById(R.id.user_name);
         btnEmail = view.findViewById(R.id.btn_email_setting);
-        btnWidget = view.findViewById(R.id.btn_widget_setting);
+        btnPw = view.findViewById(R.id.btn_pw_setting);
+        switchButton = view.findViewById(R.id.airbutton_switch);
 
-        SharedPreferenceBase sharedPreferenceBase = SharedPreferenceBase.getInstance(getContext());
+        final SharedPreferenceBase sharedPreferenceBase = SharedPreferenceBase.getInstance(getContext());
         username.setText(sharedPreferenceBase.getString("nickname"));
 
         btnEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                DetailsActivity.screenCheck = false;
+                Intent intent = new Intent(getActivity(), SettingEmail.class);
+                startActivity(intent);
             }
         });
 
-        btnWidget.setOnClickListener(new View.OnClickListener() {
+        btnPw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DetailsActivity.screenCheck = false;
+                Intent intent = new Intent(getActivity(), SettingPw.class);
+                startActivity(intent);
+            }
+        });
 
+        if(sharedPreferenceBase.getString("airbutton").equals("True")){
+            switchButton.setChecked(true);
+        } else{
+            switchButton.setChecked(false);
+        }
+
+        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    sharedPreferenceBase.setString("airbutton","True");
+                    Log.d("airbutton check", sharedPreferenceBase.getString("airbutton"));
+                } else{
+                    sharedPreferenceBase.setString("airbutton","False");
+                    Log.d("airbutton check", sharedPreferenceBase.getString("airbutton"));
+                }
             }
         });
 
