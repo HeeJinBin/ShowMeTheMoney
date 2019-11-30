@@ -22,6 +22,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".AirButton.CaptureActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="true">
+        </activity>
+
         <activity android:name=".LoginActivity"/>
 
         <activity android:name=".SignUpActivity"></activity>
@@ -47,6 +52,12 @@
         <service android:name=".AirButton.FloatingService"
             android:enabled="true"
             android:permission="android.permission.SYSTEM_ALERT_WINDOW">
+        </service>
+
+        <service android:name=".AirButton.CaptureService"
+            android:enabled="true"
+            android:permission="android.permission.SYSTEM_ALERT_WINDOW">
+
         </service>
     </application>
 

@@ -1,5 +1,6 @@
 package com.example.smtm7.AirButton;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Environment;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -45,11 +47,16 @@ public class FloatingService extends Service implements View.OnTouchListener{
 
     private LinearLayout first_overlay;
     private LinearLayout second_overlay;
+    private LinearLayout third_overlay;
     private ImageButton airButton;
     private ImageButton captureButton;
     private ImageButton appButton;
     private ImageButton backButton;
+    private ImageButton captureOrBackButton;
     private ImageButton deleteButton;
+
+    public int screenDensity;
+    public int displayWidth, displayHeight;
 
     float xpos = 0;
     float ypos = 0;
@@ -75,16 +82,25 @@ public class FloatingService extends Service implements View.OnTouchListener{
                         WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.RIGHT;
+        params.gravity = Gravity.TOP|Gravity.RIGHT;
 
         first_overlay = floatingView.findViewById(R.id.first_overlay);
         second_overlay = floatingView.findViewById(R.id.second_overlay);
+        third_overlay = floatingView.findViewById(R.id.third_overlay);
 
         airButton = floatingView.findViewById(R.id.floating_button);
         backButton = floatingView.findViewById(R.id.overlay_back_button);
         captureButton = floatingView.findViewById(R.id.capture_button);
         appButton = floatingView.findViewById(R.id.app_button);
         deleteButton = floatingView.findViewById(R.id.delete_button);
+        captureOrBackButton = floatingView.findViewById(R.id.capture_or_back_button);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        screenDensity = displayMetrics.densityDpi;
+        displayWidth = displayMetrics.widthPixels;
+        displayHeight = displayMetrics.heightPixels;
 
         airButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,52 +116,47 @@ public class FloatingService extends Service implements View.OnTouchListener{
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 일단 여기다 캡쳐 서버랑 통신함
-                NetworkHelper networkHelper = new NetworkHelper();
-                final ApiService apiService = networkHelper.getApiService();
-
-                //저장하는 경로
-                String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath()+"/DCIM/Camera/";
-                String file_name = "test1.jpg";
-                //그래서 저장되는 최종 path는 string_path+file_name
-
-                File file = new File(ex_storage+file_name);
-
-                RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                final MultipartBody.Part photo = MultipartBody.Part.createFormData("file",file.getName(),reqFile);
-
-                Log.d("OCR", ex_storage+file_name);
-
-                apiService.upload(photo).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()){
-                            apiService.getOCR(photo).enqueue(new Callback<ResponseOCR>() {
-                                @Override
-                                public void onResponse(Call<ResponseOCR> call, Response<ResponseOCR> response) {
-                                    ResponseOCR body = response.body();
-
-                                    //OCR 결과
-                                    if(body.getMessage().equals("OCR Success")){
-                                        Toast.makeText(getApplicationContext(), body.getPGname()+", "+body.getDate()+", "+body.getPrice(),Toast.LENGTH_LONG);
-                                        Log.d("OCR", body.getPGname()+", "+body.getDate()+", "+body.getPrice());
-                                    }
-                                }
-                                @Override
-                                public void onFailure(Call<ResponseOCR> call, Throwable t) {
-
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                    }
-                });
+                second_overlay.setClickable(false);
+                second_overlay.setVisibility(View.GONE);
+                third_overlay.setClickable(true);
+                third_overlay.setVisibility(View.VISIBLE);
+                startService(new Intent(FloatingService.this, CaptureService.class));
+                //stopSelf();
             }
         });
+
+        captureOrBackButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(getApplicationContext(), CaptureActivity.class );
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 1001, intent, 0);
+                try {
+                    pendingIntent.send();
+                }
+                catch(PendingIntent.CanceledException e) {
+                    Log.d("test", "-------------------------pending exception ");
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        captureOrBackButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(getApplicationContext(),"Back to second",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), CaptureService.class);
+                stopService(intent);
+
+                third_overlay.setClickable(false);
+                third_overlay.setVisibility(View.GONE);
+                second_overlay.setClickable(true);
+                second_overlay.setVisibility(View.VISIBLE);
+
+                return true;
+            }
+        });
+
+
 
         appButton.setOnClickListener(new View.OnClickListener() {
             @Override

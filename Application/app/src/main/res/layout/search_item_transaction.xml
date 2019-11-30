@@ -6,35 +6,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/date_item_layout"
+        android:id="@+id/first_layout"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_date_item"
-            android:textSize="18dp"
-            android:text="####년 ##월 ##일"
-            android:gravity="right"
-            android:textColor="@android:color/black"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/first_layout"
-        android:layout_below="@+id/date_item_layout"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="vertical">
@@ -44,22 +19,41 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_item"
             android:text="상품명"
-            android:textSize="20dp"
-            android:ems="15"
+            android:textSize="18dp"
             android:maxLines="1"
             android:ellipsize="end"
             android:textStyle="bold"
             android:textColor="@color/colorMain"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="10dp"
             android:layout_alignParentStart="true"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_office_item"
-            android:textSize="15dp"
-            android:layout_alignParentStart="true"
-            android:textColor="@android:color/black"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_office_item"
+                android:textSize="15dp"
+                android:layout_alignParentStart="true"
+                android:textColor="@android:color/black"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_pg_item"
+                android:text="PG사"
+                android:textSize="15dp"
+                android:textColor="@android:color/black"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -69,15 +63,16 @@
         android:layout_below="@id/first_layout"
         android:orientation="horizontal"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_pg_item"
-            android:text="PG사"
-            android:textSize="20dp"
+            android:id="@+id/tv_date_item"
+            android:textSize="15dp"
+            android:text="####년 ##월 ##일"
+            android:gravity="right"
             android:textColor="@android:color/black"/>
 
         <View
@@ -90,7 +85,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_price_item"
             android:text="####원"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             android:layout_marginRight="20dp"/>

@@ -108,7 +108,7 @@ public class DetailsActivity extends AppCompatActivity {
         Glide.with(context).load(R.raw.loading).into(loadingView);
 
         NetworkHelper networkHelper = new NetworkHelper();
-        ApiService apiService = networkHelper.getApiService();
+        final ApiService apiService = networkHelper.getApiService();
 
         final DBEmailAdapter emailAdapter = new DBEmailAdapter(context);
         final SharedPreferenceBase sharedPreferenceBase = new SharedPreferenceBase(context);
@@ -120,15 +120,17 @@ public class DetailsActivity extends AppCompatActivity {
         while(!cursor.isAfterLast()){
             EmailItem item = new EmailItem(cursor.getString(0),cursor.getString(1),cursor.getInt(2));
             emailList.add(item);
+            Log.d("EMAIL", "email : "+item.getEmail());
             cursor.moveToNext();
         }
         emailAdapter.close();
 
-        for(int i=0;i<emailList.size();i++){
-            final int finalI = i;
-            final String[] array = emailList.get(i).getEmail().split("@");
+        final int count = emailList.size();
 
-            apiService.updatelist(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id"), array[i], emailList.get(i).getPw(), emailList.get(i).getIndexs()).enqueue(new Callback<ResponseUpdate>() {
+        if(count > 0){
+            String[] array = emailList.get(0).getEmail().split("@");
+
+            apiService.updatelist(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id"), array[0], emailList.get(0).getPw(), emailList.get(0).getIndexs()).enqueue(new Callback<ResponseUpdate>() {
                 @Override
                 public void onResponse(Call<ResponseUpdate> call, Response<ResponseUpdate> response) {
                     if (response.isSuccessful()) {
@@ -136,23 +138,82 @@ public class DetailsActivity extends AppCompatActivity {
 
                         if (body.getMessage().equals("Save Success")) {
                             emailAdapter.open();
-                            emailAdapter.updateEmail(emailList.get(finalI).getEmail(),emailList.get(finalI).getPw(),body.getIndex());
+                            emailAdapter.updateEmail(emailList.get(0).getEmail(),emailList.get(0).getPw(),body.getIndex());
                             emailAdapter.close();
-                            Log.d("Email", emailList.get(finalI).getEmail());
-                        }
+                            Log.d("Email", emailList.get(0).getEmail());
 
-                        if(finalI==emailList.size()-1){
-                            loadingText.setText("거래내역이 업데이트 되었습니다.");
-                            loadingBtn.setVisibility(View.VISIBLE);
-                            loadingView.setVisibility(View.GONE);
+                            if(count > 1){
+                                String[] array = emailList.get(1).getEmail().split("@");
+
+                                apiService.updatelist(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id"), array[0], emailList.get(1).getPw(), emailList.get(1).getIndexs()).enqueue(new Callback<ResponseUpdate>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseUpdate> call, Response<ResponseUpdate> response) {
+                                        if (response.isSuccessful()) {
+                                            ResponseUpdate body = response.body();
+
+                                            if (body.getMessage().equals("Save Success")) {
+                                                emailAdapter.open();
+                                                emailAdapter.updateEmail(emailList.get(1).getEmail(),emailList.get(1).getPw(),body.getIndex());
+                                                emailAdapter.close();
+                                                Log.d("Email", emailList.get(1).getEmail());
+
+                                                if(count>2){
+                                                    String[] array = emailList.get(2).getEmail().split("@");
+
+                                                    apiService.updatelist(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id"), array[0], emailList.get(2).getPw(), emailList.get(2).getIndexs()).enqueue(new Callback<ResponseUpdate>() {
+                                                        @Override
+                                                        public void onResponse(Call<ResponseUpdate> call, Response<ResponseUpdate> response) {
+                                                            if (response.isSuccessful()) {
+                                                                ResponseUpdate body = response.body();
+
+                                                                if (body.getMessage().equals("Save Success")) {
+                                                                    emailAdapter.open();
+                                                                    emailAdapter.updateEmail(emailList.get(2).getEmail(),emailList.get(2).getPw(),body.getIndex());
+                                                                    emailAdapter.close();
+                                                                    Log.d("Email", emailList.get(2).getEmail());
+
+                                                                    changeLoading();
+                                                                }
+                                                            }
+                                                        }
+                                                        @Override
+                                                        public void onFailure(Call<ResponseUpdate> call, Throwable t) {
+                                                            Log.d("Email", "onFailure: "+t.toString());
+                                                        }
+                                                    });
+                                                } else{
+                                                    changeLoading();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    @Override
+                                    public void onFailure(Call<ResponseUpdate> call, Throwable t) {
+                                        Log.d("Email", "onFailure: "+t.toString());
+                                    }
+                                });
+                            } else {
+                                changeLoading();
+                            }
                         }
                     }
                 }
                 @Override
                 public void onFailure(Call<ResponseUpdate> call, Throwable t) {
+                    Log.d("Email", "onFailure: "+t.toString());
                 }
             });
+        } else{
+            loadingText.setText("이메일을 연동해주세요.");
+            loadingBtn.setVisibility(View.GONE);
+            loadingView.setVisibility(View.GONE);
         }
+    }
+
+    public static void changeLoading(){
+        loadingText.setText("거래내역이 업데이트 되었습니다.");
+        loadingBtn.setVisibility(View.VISIBLE);
+        loadingView.setVisibility(View.GONE);
     }
 
     @Override

@@ -64,28 +64,29 @@ public class SettingEmail extends AppCompatActivity{
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ArrayList<EmailItem> update = new ArrayList<>();
-                for(int i = 0;i<itemList.size();i++){
-                    boolean newEmail = false;
-
-                    for(int j=0;j<initItemList.size();j++){
-                        if(itemList.get(i).getEmail().equals(initItemList.get(j).getEmail())){
-                            newEmail = true;
-                            break;
-                        }
-                    }
-                    //새로 추가된 이메일
-                    if(!newEmail){
-                        update.add(itemList.get(i));
-                    }
-                }
-
-                //추가된 이메일 연동
-                for(int i=0;i<update.size();i++){
-                    emailAdapter.open();
-                    emailAdapter.insertEmail(update.get(i).getEmail(),update.get(i).getPw(),0);
-                    emailAdapter.close();
-                }
+//                final ArrayList<EmailItem> update = new ArrayList<>();
+//                for(int i = 0;i<itemList.size();i++){
+//                    boolean newEmail = false;
+//
+//                    for(int j=0;j<initItemList.size();j++){
+//                        if(itemList.get(i).getEmail().equals(initItemList.get(j).getEmail())){
+//                            newEmail = true;
+//                            break;
+//                        }
+//                    }
+//
+//                    //새로 추가된 이메일
+//                    if(!newEmail){
+//                        update.add(itemList.get(i));
+//                    }
+//                }
+//
+//                //추가된 이메일 연동
+//                for(int i=0;i<update.size();i++){
+//                    emailAdapter.open();
+//                    emailAdapter.updateEmail(update.get(i).getEmail(),update.get(i).getPw(),0);
+//                    emailAdapter.close();
+//                }
                 DetailsActivity.updateTransaction(getApplicationContext());
                 finish();
             }
