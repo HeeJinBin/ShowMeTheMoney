@@ -1,20 +1,29 @@
 package com.example.smtm7.AirButton;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.smtm7.DataBase.DBTransactionAdapter;
+import com.example.smtm7.DetailsView.DetailsActivity;
+import com.example.smtm7.DetailsView.ListAdapter;
+import com.example.smtm7.DetailsView.TransactionItem;
 import com.example.smtm7.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class BottomSheetActivity extends AppCompatActivity {
 
@@ -29,6 +38,10 @@ public class BottomSheetActivity extends AppCompatActivity {
     private int price = -1;
 
     private Button moveButton;
+    private ListView listView;
+    private ArrayList<TransactionItem> itemList;
+    private ListAdapter listAdapter;
+    private DBTransactionAdapter transactionAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,9 +49,6 @@ public class BottomSheetActivity extends AppCompatActivity {
         setContentView(R.layout.bottomsheet);
 
         Intent intent = getIntent();
-
-//      View view = findViewById(R.id.bottomsheet_layout);
-//      view.setBackgroundColor(0x80FFFF00);
 
         bottomsheetLayout = findViewById(R.id.bottomsheet);
 
@@ -58,6 +68,7 @@ public class BottomSheetActivity extends AppCompatActivity {
             String array[] = str.split("\\.");
             if(array[0].equals("0")){
                 textDate.setText("날짜: " + array[1]+"."+array[2]);
+                date=array[1]+array[2];
             } else if(array[0].length()==2) {
                 textDate.setText("날짜: " + intent.getStringExtra("date"));
                 date="20"+intent.getStringExtra("date");
@@ -73,6 +84,32 @@ public class BottomSheetActivity extends AppCompatActivity {
         }
         else
             textPrice.setText("가격: ");
+
+        listView = findViewById(R.id.bottomsheet_list);
+        itemList = new ArrayList<>();
+        transactionAdapter = new DBTransactionAdapter(this);
+        transactionAdapter.open();
+
+        Cursor cursor = transactionAdapter.searchhBottomSheetResult(pg,date,price);
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            String office = "";
+            if (!cursor.getString(3).equals("none")) {
+                office = cursor.getString(3);
+            }
+
+            DecimalFormat decimalFormat = new DecimalFormat("#,###");
+            String priceString = decimalFormat.format(Double.parseDouble(cursor.getString(5))) + "원";
+            String dateString = cursor.getString(2).substring(0,4)+"-"+cursor.getString(2).substring(4,6)+"-"+cursor.getString(2).substring(6,8);
+
+            TransactionItem item = new TransactionItem(cursor.getString(1), dateString, office, cursor.getString(4), priceString);
+            itemList.add(item);
+            cursor.moveToNext();
+        }
+        transactionAdapter.close();
+
+        listAdapter = new ListAdapter(itemList);
+        listView.setAdapter(listAdapter);
 
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomsheetLayout);
         behavior.setPeekHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56.f, getResources().getDisplayMetrics()));
@@ -96,13 +133,24 @@ public class BottomSheetActivity extends AppCompatActivity {
                     case BottomSheetBehavior.STATE_DRAGGING:
                         break;
                     case BottomSheetBehavior.STATE_SETTLING:
-                        break;
                 }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
 
+            }
+        });
+
+        moveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent service = new Intent(getApplicationContext(), FloatingService.class);
+                stopService(service);
+
+                Intent intent1 = new Intent(getApplicationContext(), DetailsActivity.class);
+                startActivity(intent1);
+                finish();
             }
         });
     }

@@ -146,7 +146,6 @@ public class FloatingService extends Service implements View.OnTouchListener{
             }
         });
 
-
         //캡쳐안함
         captureOrBackButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

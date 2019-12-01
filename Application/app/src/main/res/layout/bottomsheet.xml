@@ -61,9 +61,9 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/bottomsheet_list"
-            android:layout_marginTop="20dp"/>
+            android:layout_height="150dp"
+            android:background="@android:color/white"
+            android:id="@+id/bottomsheet_list"/>
 
         <LinearLayout
             android:id="@+id/button_layout"

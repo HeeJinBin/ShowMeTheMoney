@@ -80,6 +80,56 @@ public class DBTransactionAdapter {
         return database.rawQuery(sql, null);
     }
 
+    public Cursor searchhBottomSheetResult(String pgname, String datename, int pricename){
+        String sql = "select * from "+DATABASE_TTABLE;
+
+        String pgquery = "";
+        if(!pgname.equals("")){
+            pgquery += "pg = '"+pgname+"'";
+        }
+
+        String datequery = "";
+        if(!datename.equals("")){
+            if(datename.length()==4){
+                datequery += "date = '2019"+datename+"' or date = '2018"+datename+"' or date = '2017"+datename+"' or date = '2016"+datename+"'";
+            } else{
+                datequery += "date = '"+datename+"'";
+            }
+        }
+
+        String pricequery = "";
+        if(pricename != -1){
+            pricequery += "price = '"+pricename+"'";
+        }
+
+        if(!pgquery.equals("")){
+            sql+=" where "+pgquery;
+            if(!datequery.equals("")){
+                sql+=" and "+datequery;
+            }
+            if(!pricequery.equals("")){
+                sql+=" and "+pricequery;
+            }
+        } else{
+            if(!datequery.equals("")){
+                sql+=" where "+datequery;
+                if(!pricequery.equals("")){
+                    sql+=" and "+pricequery;
+                }
+            } else{
+                if(!pricequery.equals("")){
+                    sql+=" where "+pricequery;
+                }
+            }
+        }
+
+        sql+=" order by date desc;";
+
+        Log.d("DBTransaction", sql);
+
+        return database.rawQuery(sql, null);
+    }
+
     public Cursor searchTransaction(ArrayList<String> pglist, int firstDate, int secondDate, int firstPrice, int secondPrice){
         String sql = "select * from "+DATABASE_TTABLE;
 
