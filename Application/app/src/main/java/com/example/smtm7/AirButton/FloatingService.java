@@ -125,6 +125,8 @@ public class FloatingService extends Service implements View.OnTouchListener{
             }
         });
 
+
+        //실제 캡쳐
         captureOrBackButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -137,9 +139,11 @@ public class FloatingService extends Service implements View.OnTouchListener{
                     Log.d("test", "-------------------------pending exception ");
                     e.printStackTrace();
                 }
-
             }
         });
+
+
+        //캡쳐안함
         captureOrBackButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -155,8 +159,6 @@ public class FloatingService extends Service implements View.OnTouchListener{
                 return true;
             }
         });
-
-
 
         appButton.setOnClickListener(new View.OnClickListener() {
             @Override

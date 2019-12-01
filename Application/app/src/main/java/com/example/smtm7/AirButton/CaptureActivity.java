@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.smtm7.Connection.ApiService;
 import com.example.smtm7.Connection.NetworkHelper;
 import com.example.smtm7.Connection.ResponseOCR;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -115,6 +116,9 @@ public class CaptureActivity extends Activity {
             e.printStackTrace();
         }
 
+        Intent intent = new Intent(getApplicationContext(), CaptureService.class);
+        stopService(intent);
+
         finish();
     }
 
@@ -145,12 +149,9 @@ public class CaptureActivity extends Activity {
 
         saveBitmaptoJPEG(bitmap, fileName);
 
-
-
-
     }
 
-    public static void saveBitmaptoJPEG(Bitmap bitmap, String name){
+    public void saveBitmaptoJPEG(Bitmap bitmap, String name){
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath()+"/DCIM/Camera/";
         //String folder_name = "/"+"ScreenShot"+"/";
         String file_name = name+".jpg";
@@ -182,7 +183,7 @@ public class CaptureActivity extends Activity {
         NetworkHelper networkHelper = new NetworkHelper();
         final ApiService apiService = networkHelper.getApiService();
         File file = new File(string_path+file_name);
-        RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        final RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         final MultipartBody.Part photo = MultipartBody.Part.createFormData("file",file.getName(),reqFile);
 
         Log.d("OCR", string_path+file_name);
@@ -194,15 +195,26 @@ public class CaptureActivity extends Activity {
                     apiService.getOCR(photo).enqueue(new Callback<ResponseOCR>() {
                         @Override
                         public void onResponse(Call<ResponseOCR> call, Response<ResponseOCR> response) {
-                            ResponseOCR body = response.body();
-                            //OCR 결과
-                            if(body.getMessage().equals("OCR Success")){
-                                Log.d("OCR", body.getPGname()+", "+body.getDate()+", "+body.getPrice());
+                            if(response.isSuccessful()){
+                                ResponseOCR body = response.body();
+                                Log.d("OCR", body.getMessage()+","+ body.getPGname()+", "+body.getDate()+", "+body.getPrice());
+                                //OCR 결과
+                                if(body.getMessage().equals("OCR Success")){
+                                    Intent intent = new Intent(getApplicationContext(), BottomSheetActivity.class);
+                                    intent.putExtra("pg", body.getPGname());
+                                    intent.putExtra("date",body.getDate());
+                                    intent.putExtra("price",body.getPrice());
+
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            } else{
+                                Log.d("OCR", "onResponse: failed");
                             }
                         }
                         @Override
                         public void onFailure(Call<ResponseOCR> call, Throwable t) {
-
+                            Log.d("OCR", "onFailure"+t.toString());
                         }
                     });
                 }
@@ -217,8 +229,8 @@ public class CaptureActivity extends Activity {
 
     public static Bitmap cropBitmap(Bitmap original){
         Bitmap result = Bitmap.createBitmap(original
-                , 0, 1010
-                ,original.getWidth(), 302); //시작x,시작y,넓이,높이
+                , 0, 900
+                ,original.getWidth(), 300); //시작x,시작y,넓이,높이
         return result;
 
     }

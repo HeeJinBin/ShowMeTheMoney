@@ -18,7 +18,6 @@ public class CaptureService extends Service {
     private WindowManager windowManager2;
     public View squareFrame;
 
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -50,11 +49,14 @@ public class CaptureService extends Service {
         windowManager2.addView(squareFrame, params);
 
 
-int location[] = new int[2];
+        int location[] = new int[2];
         Log.d("testlocation", "---------------------Width : " + location[0]);
         Log.d("testlocation","----------------------Height : " + location[1]);
     }
 
+    public static void StopService(){
+
+    }
 
     @Override
     public void onDestroy() {

@@ -4,9 +4,9 @@ public class ResponseOCR {
     private String message;
     private String PGname;
     private String date;
-    private int price;
+    private String price;
 
-    public ResponseOCR(String message, String PGname, String date, int price){
+    public ResponseOCR(String message, String PGname, String date, String price){
         this.message = message;
         this.PGname = PGname;
         this.date = date;
@@ -25,7 +25,7 @@ public class ResponseOCR {
         return date;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 }
