@@ -42,7 +42,7 @@ public interface ApiService {
     //거래내역 받아오기
     @FormUrlEncoded
     @POST("/accounts/datalist/")
-    Call<List<ResponseTransaction>> getTransaction(@Header("Authorization") String token, @Field("username") String username, @Field("myIndex") int index);
+    Call<List<ResponseTransaction>> getTransaction(@Header("Authorization") String token, @Field("username") String username);
 
     //OCR
     @Multipart

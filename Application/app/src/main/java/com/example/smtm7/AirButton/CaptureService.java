@@ -54,10 +54,6 @@ public class CaptureService extends Service {
         Log.d("testlocation","----------------------Height : " + location[1]);
     }
 
-    public static void StopService(){
-
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -134,6 +134,10 @@ public class FloatingService extends Service implements View.OnTouchListener{
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 1001, intent, 0);
                 try {
                     pendingIntent.send();
+                    third_overlay.setClickable(false);
+                    third_overlay.setVisibility(View.GONE);
+                    first_overlay.setClickable(true);
+                    first_overlay.setVisibility(View.VISIBLE);
                 }
                 catch(PendingIntent.CanceledException e) {
                     Log.d("test", "-------------------------pending exception ");

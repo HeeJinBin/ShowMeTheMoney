@@ -230,7 +230,7 @@ public class CaptureActivity extends Activity {
     public static Bitmap cropBitmap(Bitmap original){
         Bitmap result = Bitmap.createBitmap(original
                 , 0, 900
-                ,original.getWidth(), 300); //시작x,시작y,넓이,높이
+                ,original.getWidth(), 280); //시작x,시작y,넓이,높이
         return result;
 
     }

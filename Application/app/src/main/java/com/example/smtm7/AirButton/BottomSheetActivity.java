@@ -19,14 +19,16 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 public class BottomSheetActivity extends AppCompatActivity {
 
     private LinearLayout bottomsheetLayout;
-    private LinearLayout buttonLayout;
 
     private TextView textPG;
     private TextView textDate;
     private TextView textPrice;
 
-    private Button searchButton;
-    private Button fixButton;
+    private String pg = "";
+    private String date = "";
+    private int price = -1;
+
+    private Button moveButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,31 +37,40 @@ public class BottomSheetActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+//      View view = findViewById(R.id.bottomsheet_layout);
+//      view.setBackgroundColor(0x80FFFF00);
+
         bottomsheetLayout = findViewById(R.id.bottomsheet);
-        buttonLayout = findViewById(R.id.button_layout);
 
         textPG = findViewById(R.id.text_pg);
         textDate = findViewById(R.id.text_date);
         textPrice = findViewById(R.id.text_price);
 
-        searchButton = findViewById(R.id.btn_search);
+        moveButton = findViewById(R.id.btn_move);
 
-        if(!intent.getStringExtra("pg").equals("null"))
-            textPG.setText("PG사: "+intent.getStringExtra("pg"));
+        if(!intent.getStringExtra("pg").equals("null")) {
+            textPG.setText("PG사: " + intent.getStringExtra("pg"));
+            pg = intent.getStringExtra("pg");
+        }
 
         String str = intent.getStringExtra("date");
         if(!intent.getStringExtra("date").equals("null")) {
             String array[] = str.split("\\.");
-            Log.d("gg", str);
-            Log.d("gg", array[0]+"   "+array[1]+"   "+array[2]);
             if(array[0].equals("0")){
                 textDate.setText("날짜: " + array[1]+"."+array[2]);
+            } else if(array[0].length()==2) {
+                textDate.setText("날짜: " + intent.getStringExtra("date"));
+                date="20"+intent.getStringExtra("date");
             } else{
                 textDate.setText("날짜: " + intent.getStringExtra("date"));
+                date = intent.getStringExtra("date");
             }
         }
-        if(!intent.getStringExtra("price").equals("null"))
-            textPrice.setText("가격: "+intent.getStringExtra("price")+"원");
+
+        if(!intent.getStringExtra("price").equals("null")) {
+            textPrice.setText("가격: " + intent.getStringExtra("price") + "원");
+            price = Integer.parseInt(intent.getStringExtra("price"));
+        }
         else
             textPrice.setText("가격: ");
 

@@ -205,7 +205,8 @@ public class FragmentFiltering extends Fragment {
 
                 TransactionItem item = new TransactionItem(cursor.getString(1), date, office, cursor.getString(4), price);
 
-                itemList.add(item);
+                if(!itemList.contains(item))
+                    itemList.add(item);
                 cursor.moveToNext();
             }
             transactionAdapter.close();

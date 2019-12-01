@@ -59,6 +59,12 @@
 
         </LinearLayout>
 
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bottomsheet_list"
+            android:layout_marginTop="20dp"/>
+
         <LinearLayout
             android:id="@+id/button_layout"
             android:layout_width="match_parent"
@@ -67,10 +73,10 @@
             android:padding="6dp">
 
             <Button
-                android:id="@+id/btn_search"
+                android:id="@+id/btn_move"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:background="#000"
                 android:foreground="?attr/selectableItemBackground"
                 android:text="앱으로 이동"

@@ -86,29 +86,30 @@ public class FragmentSearch extends Fragment implements SwipeRefreshLayout.OnRef
 
         final SharedPreferenceBase sharedPreferenceBase = new SharedPreferenceBase(getContext());
 
-        apiService.getTransaction(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id"), Integer.parseInt(sharedPreferenceBase.getString("transactionIndex"))).enqueue(new Callback<List<ResponseTransaction>>() {
+        apiService.getTransaction(sharedPreferenceBase.getString("access"), sharedPreferenceBase.getString("id")).enqueue(new Callback<List<ResponseTransaction>>() {
             @Override
             public void onResponse(Call<List<ResponseTransaction>> call, Response<List<ResponseTransaction>> response) {
                 if(response.isSuccessful()){
                     List<ResponseTransaction> resource = response.body();
 
-                    int index = Integer.parseInt(sharedPreferenceBase.getString("transactionIndex"));
+                    //int index = Integer.parseInt(sharedPreferenceBase.getString("transactionIndex"));
                     transactionAdapter.open();
+                    transactionAdapter.deleteAllTransaction();
 
-                    Log.d("transactionIndex", "first index: "+index);
+                   // Log.d("transactionIndex", "first index: "+index);
                     //내부 DB에 저장 (Transaction)
                     for(ResponseTransaction re : resource){
-                        index++;
+                        //index++;
                         Log.d("TAG", re.getDate());
                         int date = Integer.parseInt(re.getDate().replace("-",""));
                         transactionAdapter.insertTransaction(re.getPGname(), date, re.getPurchasing_office(), re.getPurchasing_item(), re.getPrice());
                         Log.d("TAG", re.getPGname()+" "+date+" "+re.getPurchasing_office()+" "+re.getPurchasing_item()+" "+re.getPrice());
                     }
 
-                    Log.d("transactionIndex", "update index: "+index);
+                   // Log.d("transactionIndex", "update index: "+index);
 
                     transactionAdapter.close();
-                    sharedPreferenceBase.setString("transactionIndex", Integer.toString(index));
+                    //sharedPreferenceBase.setString("transactionIndex", Integer.toString(index));
                     updateList();
                 }
             }
@@ -141,7 +142,10 @@ public class FragmentSearch extends Fragment implements SwipeRefreshLayout.OnRef
 
             TransactionItem item = new TransactionItem(cursor.getString(1),date,office,cursor.getString(4),price);
             Log.d("TAG", cursor.getString(1)+date+office+cursor.getString(4)+price);
-            itemList.add(item);
+            if(!itemList.contains(item)) {
+                itemList.add(item);
+                Log.d("TAG", "updateList: "+cursor.getString(1)+date+office+cursor.getString(4)+price);
+            }
             cursor.moveToNext();
         }
         transactionAdapter.close();
