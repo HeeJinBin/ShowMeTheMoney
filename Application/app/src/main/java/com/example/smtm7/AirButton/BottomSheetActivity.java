@@ -71,10 +71,10 @@ public class BottomSheetActivity extends AppCompatActivity {
                 date=array[1]+array[2];
             } else if(array[0].length()==2) {
                 textDate.setText("날짜: " + intent.getStringExtra("date"));
-                date="20"+intent.getStringExtra("date");
+                date="20"+array[0]+array[1]+array[2];
             } else{
                 textDate.setText("날짜: " + intent.getStringExtra("date"));
-                date = intent.getStringExtra("date");
+                date = array[0]+array[1]+array[2];
             }
         }
 
