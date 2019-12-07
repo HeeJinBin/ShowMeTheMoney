@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@m"
+        android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -12,8 +12,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:usesCleartextTraffic="true">
         
-        <activity
-            android:name=".ScreenActivity"
+        <activity android:name=".ScreenActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="true">
             <intent-filter>
@@ -21,45 +20,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".AirButton.CaptureActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="true">
         </activity>
-
         <activity android:name=".AirButton.BottomSheetActivity"/>
-
         <activity android:name=".LoginActivity"/>
-
         <activity android:name=".SignUpActivity"></activity>
         <activity android:name=".Certification"></activity>
-
         <activity android:name=".InitialSetting.EmailInterlock"></activity>
         <activity android:name=".InitialSetting.CertificationSetting">
         </activity>
-
-        <activity
-            android:name=".AirButton.FloatingActivity"
+        <activity android:name=".AirButton.FloatingActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="true">
         </activity>
-
         <activity android:name=".DetailsView.DetailsActivity"/>
         <activity android:name=".DetailsView.SelectPG"/>
         <activity android:name=".DetailsView.SelectDate"/>
         <activity android:name=".DetailsView.SelectPrice"/>
         <activity android:name=".DetailsView.SettingEmail"/>
         <activity android:name=".DetailsView.SettingPw"/>
-
         <service android:name=".AirButton.FloatingService"
             android:enabled="true"
             android:permission="android.permission.SYSTEM_ALERT_WINDOW">
         </service>
-
         <service android:name=".AirButton.CaptureService"
             android:enabled="true"
             android:permission="android.permission.SYSTEM_ALERT_WINDOW">
-
         </service>
     </application>
 

@@ -69,8 +69,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:id="@+id/overlay_back_button"
-                android:background="@drawable/air_button_cancel_icon"
-                android:src="@drawable/air_button_cancel"
+                android:background="@drawable/air_button_money_click"
                 android:layout_alignParentRight="true"/>
         </LinearLayout>
 

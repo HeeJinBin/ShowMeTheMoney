@@ -1,7 +1,6 @@
 package com.example.smtm7.Connection;
 
 public class ResponseTransaction {
-    private int myIndex;
     private String PGname;
     private String date;
     private String purchasing_office = null;

@@ -39,10 +39,15 @@ public interface ApiService {
     @POST("/maildata/")
     Call<ResponseUpdate> updatelist(@Header("Authorization") String token, @Field("username") String username, @Field("useremail") String email, @Field("userpassword") String password, @Field("index") int index);
 
+    //거래내역 확인
+    @FormUrlEncoded
+    @POST("/accounts/check/")
+    Call<ResponseCheck> checkTransaction(@Header("Authorization") String token, @Field("username") String username, @Field("myIndex") int index);
+
     //거래내역 받아오기
     @FormUrlEncoded
     @POST("/accounts/datalist/")
-    Call<List<ResponseTransaction>> getTransaction(@Header("Authorization") String token, @Field("username") String username);
+    Call<List<ResponseTransaction>> getTransaction(@Header("Authorization") String token, @Field("username") String username, @Field("myIndex") int index);
 
     //OCR
     @Multipart

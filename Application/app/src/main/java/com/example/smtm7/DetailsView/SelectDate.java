@@ -73,17 +73,10 @@ public class SelectDate extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int day1 = Integer.parseInt(dateText1.replace("-", ""));
-                int day2 = Integer.parseInt(dateText2.replace("-", ""));
-
-                if (day1 <= day2) {
-                    Intent intent = new Intent();
-                    intent.putExtra("Check", "False");
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } else {
-                    Toast.makeText(SelectDate.this, "올바른 날짜 범위가 아닙니다.", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent();
+                intent.putExtra("Check", "False");
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -91,12 +84,19 @@ public class SelectDate extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("Check", "True");
-                intent.putExtra("First", dateText1);
-                intent.putExtra("Second", dateText2);
-                setResult(RESULT_OK, intent);
-                finish();
+                int day1 = Integer.parseInt(dateText1.replace("-", ""));
+                int day2 = Integer.parseInt(dateText2.replace("-", ""));
+
+                if (day1 <= day2) {
+                    Intent intent = new Intent();
+                    intent.putExtra("Check", "True");
+                    intent.putExtra("First", dateText1);
+                    intent.putExtra("Second", dateText2);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    Toast.makeText(SelectDate.this, "올바른 날짜 범위가 아닙니다.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

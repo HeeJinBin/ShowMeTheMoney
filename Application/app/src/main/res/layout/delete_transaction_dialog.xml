@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="선택한 거래내역을 삭제하시겠습니까?"
+        android:textSize="18dp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/transaction_delete"
+            android:gravity="center"
+            android:text="삭제"
+            android:textSize="20dp"
+            android:textColor="@android:color/white"
+            android:background="@color/colorMain"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/transaction_cancel"
+            android:text="취소"
+            android:textSize="20dp"
+            android:textColor="@color/colorMain"
+            android:background="@drawable/btn_shape"/>
+    </LinearLayout>
+</LinearLayout>

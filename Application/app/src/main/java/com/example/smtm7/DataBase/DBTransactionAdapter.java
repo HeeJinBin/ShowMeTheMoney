@@ -16,7 +16,6 @@ public class DBTransactionAdapter {
     public static final String OFFICE = "office";
     public static final String ITEM = "item";
     public static final String PRICE = "price";
-    public static final String ROW_ID = "_id";
 
     private DatabaseTHelper databaseHelper;
     private SQLiteDatabase database;
@@ -181,6 +180,11 @@ public class DBTransactionAdapter {
         Log.d("DBTransaction", sql);
 
         return database.rawQuery(sql, null);
+    }
+
+    public void deleteTransaction(String pg, int date, String item, int price){
+        String sql = "delete from "+DATABASE_TTABLE+" where pg = '"+pg+"' and date = '"+date+"' and item = '"+item+"' and price = '"+price+"';";
+        database.execSQL(sql);
     }
 
     public void deleteAllTransaction(){
